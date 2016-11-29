@@ -7,6 +7,7 @@
 //
 
 #import "XMPPTool.h"
+#import "Config.h"
 #import "XMPPRoster.h"
 #import "XMPPMessageArchivingCoreDataStorage.h"
 #import "XMPPRosterCoreDataStorage.h"
@@ -148,7 +149,22 @@
     NSLog(@"注销成功");
 }
 
+//添加好友
+-(BOOL) addFriend:(NSString*) friendName
+{
+    XMPPJID * friendJid = [XMPPJID jidWithString:[NSString stringWithFormat:@%@@%@,friendName,MY_DOMAIN]];
+    [self.rosterModule subscribePresenceToUser:friendJid];
+    return YES;
+}
 
+//删除好友
+-(BOOL) deleteFriend:(NSString*) friendName
+{
+    XMPPJID * friendJid = [XMPPJID jidWithString:[NSString stringWithFormat:@%@@%@,friendName,MY_DOMAIN]];
+    [self.rosterModule removeUser:friendJid];
+    return  YES;
+    
+}
 
 //获取当前屏幕显示的viewcontroller
 - (UIViewController *)getCurrentVC

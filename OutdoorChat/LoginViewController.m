@@ -11,7 +11,11 @@
 #import "Config.h"
 #import "XMPPTool.h"
 
+NSString *const kXMPPmyJID = @"kXMPPmyJID";
+NSString *const kXMPPmyPassword = @"kXMPPmyPassword";
+
 @interface LoginViewController ()
+
 
 @end
 
@@ -20,6 +24,23 @@
 
 @implementation LoginViewController
 
+-(void) viewWillAppear:(BOOL)animated{
+    userNameTextFiled.text=[[NSUserDefaults standardUserDefaults]stringForKey:kXMPPmyJID];
+    passwordTextFiled.text=[[NSUserDefaults standardUserDefaults]stringForKey:kXMPPmyPassword];
+    
+    passwordTextFiled.delegate=self;
+    userNameTextFiled.delegate=self;
+}
+
+- (void)setField:(UITextField *)field forKey:(NSString *)key
+{
+    if (field.text != nil)
+    {
+        [[NSUserDefaults standardUserDefaults] setObject:field.text forKey:key];
+    } else {
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
+    }
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -57,6 +78,11 @@
     return YES;
 }
 
+//点击空白处收回键盘
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+    [userNameTextFiled resignFirstResponder];
+    [passwordTextFiled resignFirstResponder];
+}
 
 /*
 #pragma mark - Navigation
@@ -81,21 +107,17 @@
 
 
 
-- (IBAction)tapButton:(id)sender {
-}
-
-
-
-
 
 
 
 - (IBAction)LoginAction:(UIButton *)sender {
-    XMPPTool * xmppTool=[XMPPTool sharedXMPPTool];
-    [xmppTool setLoginOrReg:loginTag];
-    [xmppTool setUserName:@"iphone"];
-    [xmppTool setUserPwd:@"iphone"];
-    [xmppTool loginOrRegister];
+    [self setField:userNameTextFiled forKey:kXMPPmyJID];
+    [self setField:passwordTextFiled forKey:kXMPPmyPassword];
+    
+    [self dismissViewControllerAnimated:YES completion:NULL];
 }
+
+@synthesize userNameTextFiled;
+@synthesize passwordTextFiled;
 
 @end

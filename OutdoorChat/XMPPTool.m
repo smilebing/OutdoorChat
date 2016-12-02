@@ -12,10 +12,12 @@
 #import "XMPPMessageArchivingCoreDataStorage.h"
 #import "XMPPRosterCoreDataStorage.h"
 #import <XMPPFramework/XMPPFramework.h>
+#import <XMPPFramework/XMPPRosterMemoryStorage.h>
 
 @interface XMPPTool ()<XMPPStreamDelegate>      
 
 @property(strong,nonatomic) XMPPRosterCoreDataStorage * rosterStorage;//花名册存储
+@property(strong,nonatomic) XMPPRosterMemoryStorage * xmppRosterMemoryStorage;
 @property(strong,nonatomic) XMPPRoster * rosterModule;//花名册模块
 @property (nonatomic,retain)XMPPStream *myStream;//通道
 
@@ -44,7 +46,39 @@
     //设置代理
     [_myStream addDelegate:self delegateQueue:dispatch_get_main_queue()];
     
+    
+    // 3.好友模块 支持我们管理、同步、申请、删除好友
+    _xmppRosterMemoryStorage = [[XMPPRosterMemoryStorage alloc] init];
+    _rosterModule = [[XMPPRoster alloc] initWithRosterStorage:_xmppRosterMemoryStorage];
+    [_rosterModule activate:self.myStream];
+    
+    //同时给_xmppRosterMemoryStorage 和 _xmppRoster都添加了代理
+    [_rosterModule addDelegate:self delegateQueue:dispatch_get_main_queue()];
+    //设置好友同步策略,XMPP一旦连接成功，同步好友到本地
+    [_rosterModule setAutoFetchRoster:YES]; //自动同步，从服务器取出好友
+    //关掉自动接收好友请求，默认开启自动同意
+    [_rosterModule setAutoAcceptKnownPresenceSubscriptionRequests:NO];
+    NSLog(@"roster finish")  ;
+    
 }
+
+/**
+ * 同步结束
+ **/
+//收到好友列表IQ会进入的方法，并且已经存入我的存储器
+//- (void)xmppRosterDidEndPopulating:(XMPPRoster *)sender
+//{
+//    [[NSNotificationCenter defaultCenter] postNotificationName:kXMPP_ROSTER_CHANGE object:nil];
+//}
+//
+//#pragma mark - notification event
+//- (void)rosterChange
+//{
+//    //从存储器中取出我得好友数组，更新数据源
+//    self.contacts = [NSMutableArray arrayWithArray:[JKXMPPTool sharedInstance].xmppRosterMemoryStorage.unsortedUsers];
+//    [self.tableView reloadData];
+//    
+//}
 
 //登录或者注册
 -(void)loginOrRegister
@@ -140,6 +174,7 @@
     NSLog(@"注册失败");
 }
 
+//发送离线信息
 -(void)sendOffLineToHost{
     // 1." 发送 "离线" 消息",不设置type的默认是available
     XMPPPresence *offline = [XMPPPresence presenceWithType:@"unavailable"];
@@ -149,22 +184,24 @@
     NSLog(@"注销成功");
 }
 
-//添加好友
--(BOOL) addFriend:(NSString*) friendName
-{
-    XMPPJID * friendJid = [XMPPJID jidWithString:[NSString stringWithFormat:@%@@%@,friendName,MY_DOMAIN]];
-    [self.rosterModule subscribePresenceToUser:friendJid];
-    return YES;
-}
 
-//删除好友
--(BOOL) deleteFriend:(NSString*) friendName
-{
-    XMPPJID * friendJid = [XMPPJID jidWithString:[NSString stringWithFormat:@%@@%@,friendName,MY_DOMAIN]];
-    [self.rosterModule removeUser:friendJid];
-    return  YES;
-    
-}
+
+////添加好友
+//-(BOOL) addFriend:(NSString*) friendName
+//{
+//    XMPPJID * friendJid = [XMPPJID jidWithString:[NSString stringWithFormat:@%@@%@,friendName,MY_DOMAIN]];
+//    [self.rosterModule subscribePresenceToUser:friendJid];
+//    return YES;
+//}
+//
+////删除好友
+//-(BOOL) deleteFriend:(NSString*) friendName
+//{
+//    XMPPJID * friendJid = [XMPPJID jidWithString:[NSString stringWithFormat:@%@@%@,friendName,MY_DOMAIN]];
+//    [self.rosterModule removeUser:friendJid];
+//    return  YES;
+//    
+//}
 
 //获取当前屏幕显示的viewcontroller
 - (UIViewController *)getCurrentVC

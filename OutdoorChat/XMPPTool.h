@@ -35,4 +35,6 @@ typedef enum
 -(void)loginOrRegister;
 //注销登录
 -(void)sendOffLineToHost;
+
+-(NSArray *)getFriendList;
 @end

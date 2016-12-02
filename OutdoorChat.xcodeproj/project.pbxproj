@@ -7,13 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6A0B799A1DF01CD100E55D05 /* XMPPData.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A0B79991DF01CD100E55D05 /* XMPPData.m */; };
+		6A0B799D1DF040E200E55D05 /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A0B799C1DF040E200E55D05 /* Login.storyboard */; };
+		6A0B79A31DF0795600E55D05 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A0B79A21DF0795600E55D05 /* Main.storyboard */; };
 		6A3408D01DEC239E00D4831C /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A3408CF1DEC239E00D4831C /* LoginViewController.m */; };
 		6A3408D31DEC23AF00D4831C /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A3408D21DEC23AF00D4831C /* RegisterViewController.m */; };
 		6A3408E01DED4C0600D4831C /* RecentChatTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A3408DF1DED4C0600D4831C /* RecentChatTableViewController.m */; };
 		6A3408E31DED4C1800D4831C /* FriendListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A3408E21DED4C1800D4831C /* FriendListTableViewController.m */; };
 		6A37BDB01DE804C400CDB960 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A37BDAF1DE804C400CDB960 /* main.m */; };
 		6A37BDB31DE804C400CDB960 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A37BDB21DE804C400CDB960 /* AppDelegate.m */; };
-		6A37BDB91DE804C400CDB960 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A37BDB71DE804C400CDB960 /* Main.storyboard */; };
 		6A37BDBB1DE804C400CDB960 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6A37BDBA1DE804C400CDB960 /* Assets.xcassets */; };
 		6A37BDBE1DE804C400CDB960 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A37BDBC1DE804C400CDB960 /* LaunchScreen.storyboard */; };
 		6A37BDD21DE84F0200CDB960 /* XMPPTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A37BDD11DE84F0200CDB960 /* XMPPTool.m */; };
@@ -23,6 +25,10 @@
 /* Begin PBXFileReference section */
 		50C3BC902148BCBC92D84028 /* Pods-OutdoorChat.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OutdoorChat.release.xcconfig"; path = "Pods/Target Support Files/Pods-OutdoorChat/Pods-OutdoorChat.release.xcconfig"; sourceTree = "<group>"; };
 		56690C988A48237A716BB04A /* Pods_OutdoorChat.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OutdoorChat.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6A0B79991DF01CD100E55D05 /* XMPPData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMPPData.m; sourceTree = "<group>"; };
+		6A0B799B1DF01CEE00E55D05 /* XMPPData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XMPPData.h; sourceTree = "<group>"; };
+		6A0B799C1DF040E200E55D05 /* Login.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Login.storyboard; path = ../Login.storyboard; sourceTree = "<group>"; };
+		6A0B79A21DF0795600E55D05 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		6A3408CE1DEC239E00D4831C /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		6A3408CF1DEC239E00D4831C /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		6A3408D11DEC23AF00D4831C /* RegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterViewController.h; sourceTree = "<group>"; };
@@ -36,7 +42,6 @@
 		6A37BDAF1DE804C400CDB960 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		6A37BDB11DE804C400CDB960 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		6A37BDB21DE804C400CDB960 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		6A37BDB81DE804C400CDB960 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		6A37BDBA1DE804C400CDB960 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6A37BDBD1DE804C400CDB960 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6A37BDBF1DE804C400CDB960 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -63,6 +68,41 @@
 				56690C988A48237A716BB04A /* Pods_OutdoorChat.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		6A0B799E1DF0424F00E55D05 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				6A0B79A11DF0429900E55D05 /* Others */,
+				6A0B79A01DF0426700E55D05 /* Main */,
+				6A0B799F1DF0425F00E55D05 /* Login */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		6A0B799F1DF0425F00E55D05 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				6A0B799C1DF040E200E55D05 /* Login.storyboard */,
+			);
+			name = Login;
+			sourceTree = "<group>";
+		};
+		6A0B79A01DF0426700E55D05 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				6A0B79A21DF0795600E55D05 /* Main.storyboard */,
+			);
+			name = Main;
+			sourceTree = "<group>";
+		};
+		6A0B79A11DF0429900E55D05 /* Others */ = {
+			isa = PBXGroup;
+			children = (
+				6A37BDB11DE804C400CDB960 /* AppDelegate.h */,
+				6A37BDB21DE804C400CDB960 /* AppDelegate.m */,
+			);
+			name = Others;
 			sourceTree = "<group>";
 		};
 		6A3408C41DEBDE1B00D4831C /* ViewController */ = {
@@ -109,12 +149,10 @@
 		6A37BDAD1DE804C400CDB960 /* OutdoorChat */ = {
 			isa = PBXGroup;
 			children = (
+				6A0B799E1DF0424F00E55D05 /* Classes */,
 				6A3408D41DEC3A9A00D4831C /* Config */,
 				6A3408C41DEBDE1B00D4831C /* ViewController */,
 				6A37BDCD1DE84EA600CDB960 /* ToolClass */,
-				6A37BDB11DE804C400CDB960 /* AppDelegate.h */,
-				6A37BDB21DE804C400CDB960 /* AppDelegate.m */,
-				6A37BDB71DE804C400CDB960 /* Main.storyboard */,
 				6A37BDBA1DE804C400CDB960 /* Assets.xcassets */,
 				6A37BDBC1DE804C400CDB960 /* LaunchScreen.storyboard */,
 				6A37BDBF1DE804C400CDB960 /* Info.plist */,
@@ -136,6 +174,8 @@
 			children = (
 				6A37BDD01DE84EF500CDB960 /* XMPPTool.h */,
 				6A37BDD11DE84F0200CDB960 /* XMPPTool.m */,
+				6A0B79991DF01CD100E55D05 /* XMPPData.m */,
+				6A0B799B1DF01CEE00E55D05 /* XMPPData.h */,
 			);
 			name = ToolClass;
 			sourceTree = "<group>";
@@ -213,7 +253,8 @@
 			files = (
 				6A37BDBE1DE804C400CDB960 /* LaunchScreen.storyboard in Resources */,
 				6A37BDBB1DE804C400CDB960 /* Assets.xcassets in Resources */,
-				6A37BDB91DE804C400CDB960 /* Main.storyboard in Resources */,
+				6A0B799D1DF040E200E55D05 /* Login.storyboard in Resources */,
+				6A0B79A31DF0795600E55D05 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -276,6 +317,7 @@
 				6A37BDB31DE804C400CDB960 /* AppDelegate.m in Sources */,
 				6A3408E01DED4C0600D4831C /* RecentChatTableViewController.m in Sources */,
 				6A37BDD21DE84F0200CDB960 /* XMPPTool.m in Sources */,
+				6A0B799A1DF01CD100E55D05 /* XMPPData.m in Sources */,
 				6A3408E31DED4C1800D4831C /* FriendListTableViewController.m in Sources */,
 				6A37BDB01DE804C400CDB960 /* main.m in Sources */,
 				6A3408D01DEC239E00D4831C /* LoginViewController.m in Sources */,
@@ -285,14 +327,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		6A37BDB71DE804C400CDB960 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				6A37BDB81DE804C400CDB960 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		6A37BDBC1DE804C400CDB960 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -410,6 +444,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = cn.lovebing.OutdoorChat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -430,6 +465,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = cn.lovebing.OutdoorChat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

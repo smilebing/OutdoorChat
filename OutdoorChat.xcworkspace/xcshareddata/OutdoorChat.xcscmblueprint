@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "916343000ECAC71A5859464E32EBFA3D73C61395",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "81B65990005A8C464C949BE431BFEF63AA0B5263" : 9223372036854775807,
+    "916343000ECAC71A5859464E32EBFA3D73C61395" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "E926A80F-1494-40CD-A60D-577BC9DD4BB0",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "81B65990005A8C464C949BE431BFEF63AA0B5263" : "OutdoorChat\/OutdoorChat\/",
+    "916343000ECAC71A5859464E32EBFA3D73C61395" : "OutdoorChat\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "OutdoorChat",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "OutdoorChat.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/smilebing\/OutdoorChat.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "81B65990005A8C464C949BE431BFEF63AA0B5263"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/smilebing\/OutdoorChat.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "916343000ECAC71A5859464E32EBFA3D73C61395"
+    }
+  ]
+}

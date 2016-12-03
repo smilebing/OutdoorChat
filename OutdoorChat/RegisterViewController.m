@@ -10,7 +10,9 @@
 #import <XMPPFramework/XMPPFramework.h>
 #import "XMPPTool.h"
 
-@interface RegisterViewController ()
+@interface RegisterViewController ()<XMPPStreamDelegate>
+
+//@property (nonatomic, strong) XMPPStream *stream;
 
 @end
 
@@ -30,6 +32,13 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark - Delegate
+
+- (void)xmppStreamDidSecure:(XMPPStream *)sender{
+    
+    
+}
+
 /*
 #pragma mark - Navigation
 
@@ -39,8 +48,10 @@
     // Pass the selected object to the new view controller.
 }
 */
-- (IBAction)goBack:(UIButton *)sender {
-    [self dismissViewControllerAnimated:YES completion:^{}];
+
+- (IBAction)goBacktoLogin:(UIBarButtonItem *)sender {
+    [self dismissViewControllerAnimated:YES completion:^{
+    }];
 }
 
 
@@ -48,12 +59,26 @@
     //单例模式的xmpp连接类
     XMPPTool * xmppTool=[XMPPTool sharedXMPPTool];
     //开始注册
-    NSLog(@"register button down");
-    [xmppTool setUserName:@"test"];
-    [xmppTool setUserPwd:@"tt"];
+    NSLog(@"按下了注册按键");
+    NSString * userName=@"null";
+    NSString * pwd=@"null";
+    
+    userName=[_userNameTextField text];
+    pwd=[_firstPwdTextField text];
+    NSLog(@"register name:%@ pwd:%@",userName,pwd);
+    [xmppTool setUserName:userName];
+    [xmppTool setUserPwd:pwd];
     [xmppTool setLoginOrReg:registerTag];
-    [xmppTool loginOrRegister];
+    [xmppTool loginOrRegiste:^(NSError *error) {
+        if (error) {
+            
+        }
+    }];
+    
+    //注册成功后提示，清空
+    //注册失败后提示
 }
+
 
 
 @end

@@ -9,13 +9,11 @@
 
 
 #import <Foundation/Foundation.h>
-#import "LoginViewController.h"
 #ifndef XMPPTool_h
 #define XMPPTool_h
 
 
 #endif /* XMPPTool_h */
-
 
 typedef enum
 {
@@ -28,11 +26,10 @@ typedef enum
 @property (nonatomic,retain)NSString *  userName;//用户名
 @property (nonatomic,retain)NSString *  userPwd;//密码
 @property (nonatomic,assign)myTags loginOrReg;//判断是登录还是注册
-@property LoginViewController * loginView;
 //单例
 +(XMPPTool*)sharedXMPPTool;
 //登录注册方法
--(void)loginOrRegister;
+-(void)loginOrRegiste:(void(^)(NSError *error))callback;
 //注销登录
 -(void)sendOffLineToHost;
 

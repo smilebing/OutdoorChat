@@ -93,15 +93,6 @@ NSString *const kXMPPmyPassword = @"kXMPPmyPassword";
     // Pass the selected object to the new view controller.
 }
 */
-- (IBAction)showRegisterView:(UIButton *)sender {
-   
-    UIStoryboard *storybard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
-    
-    UIViewController *viewController = [storybard instantiateViewControllerWithIdentifier:@"RegisterViewController"];
-    
-    [self presentViewController:viewController animated:YES completion:^{}];
-     }
-
 
 
 
@@ -111,10 +102,24 @@ NSString *const kXMPPmyPassword = @"kXMPPmyPassword";
 
 
 - (IBAction)LoginAction:(UIButton *)sender {
+    NSLog(@"按下了登陆");
     [self setField:userNameTextFiled forKey:kXMPPmyJID];
     [self setField:passwordTextFiled forKey:kXMPPmyPassword];
     
-    [self dismissViewControllerAnimated:YES completion:NULL];
+        NSUserDefaults *userDefult = [NSUserDefaults standardUserDefaults];
+    
+        NSString *userName = [userDefult objectForKey:@"username"];
+        NSString *password = [userDefult objectForKey:@"password"];
+    
+    NSLog(@"登陆name:%@ pwd:%@",userName,password);
+    
+    XMPPTool * xmppTool =[XMPPTool sharedXMPPTool];
+    [xmppTool setUserPwd:password];
+    [xmppTool setUserName:userName];
+    [xmppTool setLoginOrReg:loginTag];
+    [xmppTool loginOrRegister];
+    
+    //[self dismissViewControllerAnimated:YES completion:NULL];
 }
 
 @synthesize userNameTextFiled;

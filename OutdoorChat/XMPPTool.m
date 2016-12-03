@@ -14,6 +14,8 @@
 #import <XMPPFramework/XMPPFramework.h>
 #import <XMPPFramework/XMPPRosterMemoryStorage.h>
 
+
+
 @interface XMPPTool ()<XMPPStreamDelegate>      
 
 @property(strong,nonatomic) XMPPRosterCoreDataStorage * rosterStorage;//花名册存储
@@ -25,9 +27,11 @@
 
 @implementation XMPPTool
 
+
 //单例
 +(XMPPTool *)sharedXMPPTool
 {
+    NSLog(@"单例获取XMPPTool");
     static XMPPTool *tool = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -80,8 +84,8 @@
 //    
 //}
 
-//登录或者注册
--(void)loginOrRegister
+//登录或者注册 (void(^)(NSString *))callback;
+-(void)loginOrRegiste:(void(^)(NSError *error))callback
 {
     if (!_myStream) {
         [self setStreamAndConnSever];
@@ -104,6 +108,7 @@
      [_myStream connectWithTimeout:5 error:&error];
     if (error) {
         NSLog(@"连接失败");
+        callback(error);
     }
 }
 
@@ -111,7 +116,7 @@
 //连接成功的代理方法
 -(void)xmppStreamDidConnect:(XMPPStream *)sender
 {
-
+    
     if (self.loginOrReg == loginTag) {
         //进行登录
         [sender authenticateWithPassword:self.userPwd error:nil];
@@ -168,6 +173,18 @@
 -(void)xmppStreamDidRegister:(XMPPStream *)sender
 {
     NSLog(@"注册成功");
+    UIAlertController * alertController= [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"注册成功" preferredStyle:UIAlertControllerStyleAlert];
+    
+    // Create the actions.
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        NSLog(@"The \"Okay/Cancel\" alert's cancel action occured.");
+    }];
+    
+    [alertController addAction:cancelAction];
+    
+    [[self getCurrentVC] presentViewController:alertController animated:YES completion:^{
+        
+    }];
 }
 -(void)xmppStream:(XMPPStream *)sender didNotRegister:(DDXMLElement *)error
 {
@@ -184,7 +201,10 @@
     NSLog(@"注销成功");
 }
 
-
+-(NSArray *)getFriendList{
+    NSArray * array=nil;
+    return array;
+}
 
 ////添加好友
 //-(BOOL) addFriend:(NSString*) friendName

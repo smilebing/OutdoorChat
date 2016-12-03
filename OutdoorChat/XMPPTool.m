@@ -14,7 +14,12 @@
 #import <XMPPFramework/XMPPFramework.h>
 #import <XMPPFramework/XMPPRosterMemoryStorage.h>
 
-
+NSString *const UserLoginSuccessNotification = @"UserLoginSuccessNotification";
+NSString *const UserLoginFailureNotification = @"UserLoginFailureNotification";
+NSString *const UserRegisterSuccessNotification = @"UserRegisterSuccessNotification";
+NSString *const UserRegisterFailureNotificatiion = @"UserRegisterFailureNotificatiion";
+NSString *const UserLogoutNotification = @"UserLogoutNotification";
+NSString *const UserConnectTimeout = @"UserConnectTimeout";
 
 @interface XMPPTool ()<XMPPStreamDelegate>      
 
@@ -27,11 +32,9 @@
 
 @implementation XMPPTool
 
-
 //单例
 +(XMPPTool *)sharedXMPPTool
 {
-    NSLog(@"单例获取XMPPTool");
     static XMPPTool *tool = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -84,8 +87,8 @@
 //    
 //}
 
-//登录或者注册 (void(^)(NSString *))callback;
--(void)loginOrRegiste:(void(^)(NSError *error))callback
+//登录或者注册
+-(void)loginOrRegister
 {
     if (!_myStream) {
         [self setStreamAndConnSever];
@@ -108,7 +111,7 @@
      [_myStream connectWithTimeout:5 error:&error];
     if (error) {
         NSLog(@"连接失败");
-        callback(error);
+        [[NSNotificationCenter defaultCenter]postNotificationName: UserConnectTimeout object:nil];
     }
 }
 
@@ -116,12 +119,12 @@
 //连接成功的代理方法
 -(void)xmppStreamDidConnect:(XMPPStream *)sender
 {
-    
-    if (self.loginOrReg == loginTag) {
+
+    if (self.operatingType == UserOperatingTypeLogin) {
         //进行登录
         [sender authenticateWithPassword:self.userPwd error:nil];
     }
-    else if(self.loginOrReg == registerTag)
+    else if(self.operatingType == UserOperatingTypeRegister)
     {
         //注册操作
         
@@ -145,19 +148,12 @@
 {
     NSLog(@"登录成功");
     //密码进入userDefault
-    NSUserDefaults *userDefult = [NSUserDefaults standardUserDefaults];
-    [userDefult setObject:self.userName forKey:@"username"];
-    [userDefult setObject:self.userPwd forKey:@"password"];
+    [[NSNotificationCenter defaultCenter] postNotificationName:UserLoginSuccessNotification object:nil];
     //设置在线状态
     XMPPPresence * pre = [XMPPPresence presence];
     [self.myStream sendElement:pre];
     
-    UIStoryboard *storybard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
-    UIViewController *viewController = [storybard instantiateViewControllerWithIdentifier:@"mainController"];
-    
-    //获取当前view,显示用户主页面
-    [[self getCurrentVC] presentViewController:viewController animated:YES completion:^{
-    }];
+ 
 }
 
 
@@ -173,22 +169,12 @@
 -(void)xmppStreamDidRegister:(XMPPStream *)sender
 {
     NSLog(@"注册成功");
-    UIAlertController * alertController= [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"注册成功" preferredStyle:UIAlertControllerStyleAlert];
-    
-    // Create the actions.
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-        NSLog(@"The \"Okay/Cancel\" alert's cancel action occured.");
-    }];
-    
-    [alertController addAction:cancelAction];
-    
-    [[self getCurrentVC] presentViewController:alertController animated:YES completion:^{
-        
-    }];
+    [[NSNotificationCenter defaultCenter] postNotificationName:UserRegisterSuccessNotification object:nil];
 }
 -(void)xmppStream:(XMPPStream *)sender didNotRegister:(DDXMLElement *)error
 {
     NSLog(@"注册失败");
+    [[NSNotificationCenter defaultCenter] postNotificationName:UserRegisterFailureNotificatiion object:nil];
 }
 
 //发送离线信息
@@ -201,10 +187,7 @@
     NSLog(@"注销成功");
 }
 
--(NSArray *)getFriendList{
-    NSArray * array=nil;
-    return array;
-}
+
 
 ////添加好友
 //-(BOOL) addFriend:(NSString*) friendName

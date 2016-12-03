@@ -7,65 +7,61 @@
 //
 
 #import "LoginViewController.h"
+#import "UIAlertController+Convenience.h"
 #import "RegisterViewController.h"
 #import "Config.h"
 #import "XMPPTool.h"
+#import "UserTool.h"
+#import "AppDelegate.h"
 
 NSString *const kXMPPmyJID = @"kXMPPmyJID";
 NSString *const kXMPPmyPassword = @"kXMPPmyPassword";
 
 @interface LoginViewController ()
 
+@property (weak, nonatomic) IBOutlet UIImageView *headView;
+@property (weak, nonatomic) IBOutlet UIButton *loginButton;
+@property (weak, nonatomic) IBOutlet UITextField *userNameTextFiled;
 
+@property (weak, nonatomic) IBOutlet UITextField *passwordTextFiled;
 @end
-
-
-
 
 @implementation LoginViewController
 
--(void) viewWillAppear:(BOOL)animated{
-    userNameTextFiled.text=[[NSUserDefaults standardUserDefaults]stringForKey:kXMPPmyJID];
-    passwordTextFiled.text=[[NSUserDefaults standardUserDefaults]stringForKey:kXMPPmyPassword];
+- (void)dealloc{
     
-    passwordTextFiled.delegate=self;
-    userNameTextFiled.delegate=self;
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)setField:(UITextField *)field forKey:(NSString *)key
-{
-    if (field.text != nil)
-    {
-        [[NSUserDefaults standardUserDefaults] setObject:field.text forKey:key];
-    } else {
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
-    }
+-(void) viewWillAppear:(BOOL)animated{
+    
+    self.userNameTextFiled.text = [UserTool userName];
+    self.passwordTextFiled.text = [UserTool password];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-   // xmppTool=[XMPPTool sharedXMPPTool];
-//    [self initXmpp];
     
-    
-    // 如果已登录就直接填充密码登陆
-//    NSUserDefaults *userDefult = [NSUserDefaults standardUserDefaults];
-//    
-//    NSString *userName = [userDefult objectForKey:@"username"];
-//    NSString *password = [userDefult objectForKey:@"password"];
-//    NSLog(@"%@,%@",userName,password);
-//    if (userName != nil && password != nil && ![userName isEqualToString:@""] && ![password isEqualToString:@""])
-//    {
-//        self.userNameTextFiled.text = userName;
-//        self.passwordTextFiled.text = password;
-//        [self xmppConnect];
-//    }
-//    
-//    self.userNameTextFiled.delegate = self;
-//    self.passwordTextFiled.delegate = self;
+    [self setupUI];
+    [self registerObersver];
 }
 
+#pragma mark - Layout
 
+- (void)setupUI{
+    
+    self.headView.layer.cornerRadius = 30;
+    self.headView.layer.borderColor = [UIColor whiteColor].CGColor;
+    
+    self.loginButton.layer.cornerRadius = 5;
+    
+    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardHide:)];
+    //设置成NO表示当前控件响应后会传播到其他控件上，默认为YES。
+    tapGestureRecognizer.cancelsTouchesInView = NO;
+    //将触摸事件添加到当前view
+    [self.view addGestureRecognizer:tapGestureRecognizer];
+    
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -73,56 +69,50 @@ NSString *const kXMPPmyPassword = @"kXMPPmyPassword";
 }
 
 
--(BOOL)textFieldShouldReturn:(UITextField *)textField {
-    [textField resignFirstResponder];
-    return YES;
+#pragma mark - User Interaction
+
+- (IBAction)loginButtonDidClicked:(id)sender {
+    
+    [self.view endEditing:YES];
+    if (!(self.userNameTextFiled.text.length && self.passwordTextFiled.text.length)) {
+        [UIAlertController showSimpleAlertControllerWithTitle:@"请输入完整信息" message:nil parentViewController:self];
+    }
+    
+    //登录接口
+    XMPPTool *tool =[XMPPTool sharedXMPPTool];
+    tool.userName = self.userNameTextFiled.text;
+    tool.userPwd = self.passwordTextFiled.text;
+    tool.operatingType = UserOperatingTypeLogin;
+    [tool loginOrRegister];
 }
 
 //点击空白处收回键盘
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    [userNameTextFiled resignFirstResponder];
-    [passwordTextFiled resignFirstResponder];
+- (void)keyboardHide:(id)sender{
+    
+    [self.view endEditing:YES];
 }
 
-/*
-#pragma mark - Navigation
+#pragma mark - Private
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
-
-
-
-
-
-
-
-- (IBAction)LoginAction:(UIButton *)sender {
-    NSLog(@"按下了登陆");
-    [self setField:userNameTextFiled forKey:kXMPPmyJID];
-    [self setField:passwordTextFiled forKey:kXMPPmyPassword];
+- (void)registerObersver{
     
-        NSUserDefaults *userDefult = [NSUserDefaults standardUserDefaults];
-    
-        NSString *userName = [userDefult objectForKey:@"username"];
-        NSString *password = [userDefult objectForKey:@"password"];
-    
-    NSLog(@"登陆name:%@ pwd:%@",userName,password);
-    
-    XMPPTool * xmppTool =[XMPPTool sharedXMPPTool];
-    [xmppTool setUserPwd:password];
-    [xmppTool setUserName:userName];
-    [xmppTool setLoginOrReg:loginTag];
-    [xmppTool loginOrRegister];
-    
-    //[self dismissViewControllerAnimated:YES completion:NULL];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginSuccess) name:UserLoginSuccessNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginFailure) name:UserLoginFailureNotification object:nil];
 }
 
-@synthesize userNameTextFiled;
-@synthesize passwordTextFiled;
+- (void)loginSuccess{
+    
+    AppDelegate *delegate = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+    
+    [delegate setupMainViewController];
+    [UserTool savePassword:self.passwordTextFiled.text];
+    [UserTool saveUserName:self.userNameTextFiled.text];
+    [UserTool saveLoginStatus:YES];
+}
+
+- (void)loginFailure{
+    
+    [UIAlertController showSimpleAlertControllerWithTitle:@"登录失败" message:nil parentViewController:self];
+}
 
 @end

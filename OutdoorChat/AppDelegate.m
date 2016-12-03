@@ -9,6 +9,8 @@
 #import "AppDelegate.h"
 #import "XMPPReconnect.h"
 #import "XMPPMessageArchiving.h"
+#import "UserTool.h"
+#import "MainTabBarViewController.h"
 
 @interface AppDelegate ()
 @property XMPPReconnect *xmppReconnect;                           //重新连接
@@ -29,7 +31,20 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-   // [self xmppInit];
+    [self xmppInit];
+    self.window = [[UIWindow alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
+    BOOL isLogin = [UserTool loginStatus];
+    
+    if (isLogin) {
+        
+        [self setupMainViewController];
+    }else{
+        
+        UIViewController *vc = [UIStoryboard storyboardWithName:@"Login" bundle:[NSBundle mainBundle]].instantiateInitialViewController;
+        self.window.rootViewController = vc ;
+    }
+    
+    [self.window makeKeyAndVisible];
 
     return YES;
 }
@@ -187,6 +202,13 @@
 - (NSURL *)applicationDocumentsDirectory
 {
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+}
+
+#pragma mark - Private
+
+- (void)setupMainViewController{
+    
+    self.window.rootViewController = [[MainTabBarViewController alloc]init];
 }
 
 @end

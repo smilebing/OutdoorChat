@@ -9,7 +9,4 @@
 #import <UIKit/UIKit.h>
 #import <XMPPFramework/XMPPFramework.h>
 @interface LoginViewController : UIViewController<XMPPStreamDelegate,UITextFieldDelegate>
-@property (weak, nonatomic) IBOutlet UITextField *userNameTextFiled;
-@property (weak, nonatomic) IBOutlet UITextField *passwordTextFiled;
-
 @end

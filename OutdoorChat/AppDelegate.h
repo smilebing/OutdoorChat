@@ -28,7 +28,7 @@
 
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
-
+- (void)setupMainViewController;
 
 @end
 

@@ -9,8 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface RegisterViewController : UIViewController
-@property (weak, nonatomic) IBOutlet UITextField *userNameTextField;
-@property (weak, nonatomic) IBOutlet UITextField *firstPwdTextField;
-@property (weak, nonatomic) IBOutlet UITextField *SecondPwdTextField;
 
 @end

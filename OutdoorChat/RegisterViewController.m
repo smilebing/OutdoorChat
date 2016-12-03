@@ -9,75 +9,84 @@
 #import "RegisterViewController.h"
 #import <XMPPFramework/XMPPFramework.h>
 #import "XMPPTool.h"
+#import "UIAlertController+Convenience.h"
 
-@interface RegisterViewController ()<XMPPStreamDelegate>
+@interface RegisterViewController ()
 
-//@property (nonatomic, strong) XMPPStream *stream;
+@property (weak, nonatomic) IBOutlet UITextField *userNameTextField;
+@property (weak, nonatomic) IBOutlet UITextField *passwordTextField;
+@property (weak, nonatomic) IBOutlet UITextField *confirmTextField;
 
 @end
 
 @implementation RegisterViewController
 
 
+- (void)dealloc{
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     NSLog(@"register view lodad");
-
-   
+    [self registerOberserver];
+    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardHide:)];
+    //设置成NO表示当前控件响应后会传播到其他控件上，默认为YES。
+    tapGestureRecognizer.cancelsTouchesInView = NO;
+    //将触摸事件添加到当前view
+    [self.view addGestureRecognizer:tapGestureRecognizer];
     // Do any additional setup after loading the view.
 }
 
+- (void)keyboardHide:(id)sender{
+    
+    [self.view endEditing:YES];
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - Delegate
 
-- (void)xmppStreamDidSecure:(XMPPStream *)sender{
+- (IBAction)registerButtonDidClicked:(id)sender {
     
+    XMPPTool * tool =[XMPPTool sharedXMPPTool];
+    
+    tool.userName = self.userNameTextField.text;
+    tool.userPwd = self.passwordTextField.text;
+    tool.operatingType = UserOperatingTypeRegister;
+    
+    [tool loginOrRegister];
     
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
-- (IBAction)goBacktoLogin:(UIBarButtonItem *)sender {
-    [self dismissViewControllerAnimated:YES completion:^{
-    }];
-}
-
-
-- (IBAction)RegisterAction:(UIButton *)sender {
-    //单例模式的xmpp连接类
-    XMPPTool * xmppTool=[XMPPTool sharedXMPPTool];
-    //开始注册
-    NSLog(@"按下了注册按键");
-    NSString * userName=@"null";
-    NSString * pwd=@"null";
+- (IBAction)dismissButtonDidClicked:(id)sender {
     
-    userName=[_userNameTextField text];
-    pwd=[_firstPwdTextField text];
-    NSLog(@"register name:%@ pwd:%@",userName,pwd);
-    [xmppTool setUserName:userName];
-    [xmppTool setUserPwd:pwd];
-    [xmppTool setLoginOrReg:registerTag];
-    [xmppTool loginOrRegiste:^(NSError *error) {
-        if (error) {
-            
-        }
-    }];
+    [self dismissViewControllerAnimated:YES completion:nil];
     
-    //注册成功后提示，清空
-    //注册失败后提示
 }
+
+#pragma mark - Private
+
+- (void)registerOberserver{
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(registerFailure) name:UserRegisterFailureNotificatiion object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(registerSuccess) name:UserRegisterSuccessNotification object:nil];
+}
+
+- (void)registerSuccess{
+    
+    [UIAlertController showSimpleAlertControllerWithTitle:@"注册成功" message:nil parentViewController:self];
+    
+}
+
+- (void)registerFailure{
+    
+     [UIAlertController showSimpleAlertControllerWithTitle:@"注册失败" message:nil parentViewController:self];
+}
+
 
 
 

@@ -17,12 +17,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    MainNavigationController *friend = [UIStoryboard storyboardWithName:@"Friend" bundle:[NSBundle mainBundle]].instantiateInitialViewController;
+    [self addOneSubViewController:friend title:@"联系人" imageName:@"tabbar_friend" selectedImageName:nil];
     
     MainNavigationController *map = [UIStoryboard storyboardWithName:@"Map" bundle:[NSBundle mainBundle]].instantiateInitialViewController;
     [self addOneSubViewController:map title:@"地图" imageName:nil selectedImageName:nil];
     
-    MainNavigationController *friend = [UIStoryboard storyboardWithName:@"Friend" bundle:[NSBundle mainBundle]].instantiateInitialViewController;
-    [self addOneSubViewController:friend title:@"联系人" imageName:@"tabbar_friend" selectedImageName:nil];
+    
     
     MainNavigationController *recent = [UIStoryboard storyboardWithName:@"Recent" bundle:[NSBundle mainBundle]].instantiateInitialViewController;
     [self addOneSubViewController:recent title:@"最近" imageName:nil selectedImageName:nil];

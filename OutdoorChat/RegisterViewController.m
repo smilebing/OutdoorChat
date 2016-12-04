@@ -49,42 +49,46 @@
 }
 
 
+//注册事件
 - (IBAction)registerButtonDidClicked:(id)sender {
     
     XMPPTool * tool =[XMPPTool sharedXMPPTool];
-    
     tool.userName = self.userNameTextField.text;
     tool.userPwd = self.passwordTextField.text;
     tool.operatingType = UserOperatingTypeRegister;
-    
-    [tool loginOrRegister];
+    [tool userRegister];
     
 }
 
+//返回
 - (IBAction)dismissButtonDidClicked:(id)sender {
     
     [self dismissViewControllerAnimated:YES completion:nil];
     
 }
 
-#pragma mark - Private
+#pragma mark - Oberserver
 
 - (void)registerOberserver{
+    NSError * error=nil;
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(registerFailure:) name:USER_REGISTER_FAIL_NOTIFICATION object:error];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(registerFailure) name:UserRegisterFailureNotificatiion object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(registerSuccess) name:UserRegisterSuccessNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(registerSuccess) name:USER_REGISTER_SUCCESS_NOTIFICATION object:nil];
 }
 
+
+#pragma mark 注册结果
+//注册成功
 - (void)registerSuccess{
-    
     [UIAlertController showSimpleAlertControllerWithTitle:@"注册成功" message:nil parentViewController:self];
-    
 }
 
-- (void)registerFailure{
-    
-     [UIAlertController showSimpleAlertControllerWithTitle:@"注册失败" message:nil parentViewController:self];
+//注册失败
+- (void)registerFailure:(NSNotification *)noti{
+    //NSError * error =noti.object;
+    //NSLog(@"注册失败 %@",error);
+    [UIAlertController showSimpleAlertControllerWithTitle:@"注册失败" message:@"用户已经存在" parentViewController:self];
 }
 
 

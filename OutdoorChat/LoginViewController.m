@@ -87,31 +87,31 @@ NSString *const kXMPPmyPassword = @"kXMPPmyPassword";
 
 //点击空白处收回键盘
 - (void)keyboardHide:(id)sender{
-    
     [self.view endEditing:YES];
 }
 
-#pragma mark - Private
+#pragma mark - Observer
 
 - (void)registerObersver{
     //登录成功和失败
+    NSError * error=nil;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginSuccess) name:USER_LOGIN_SUCCESS_NOTIFICATION object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginFailure) name:USER_LOGIN_FAIL_NOTIFICATION object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginFailure:)name:USER_LOGIN_FAIL_NOTIFICATION object:error ];
 }
 
+
 - (void)loginSuccess{
-    
     AppDelegate *delegate = (AppDelegate*)[[UIApplication sharedApplication] delegate];
-    
     [delegate setupMainViewController];
     [UserTool savePassword:self.passwordTextFiled.text];
     [UserTool saveUserName:self.userNameTextFiled.text];
     [UserTool saveLoginStatus:YES];
 }
 
-- (void)loginFailure{
-    NSLog(@"loginFailure 即将弹出窗口提示");
-    [UIAlertController showSimpleAlertControllerWithTitle:@"登录失败" message:nil parentViewController:self];
+- (void)loginFailure:(NSNotification *)noti{
+    //NSError * error =noti.object;
+    //NSLog(@"这是登录错误内容 %@",error);
+    [UIAlertController showSimpleAlertControllerWithTitle:@"登录失败" message:@"请检查用户名或者密码" parentViewController:self];
 }
 
 @end

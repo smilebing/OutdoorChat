@@ -21,11 +21,11 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
 @interface XMPPTool ()     
 
 
-
 @end
 
 @implementation XMPPTool
 
+ 
 //单例
 +(XMPPTool *)sharedXMPPTool
 {
@@ -91,6 +91,11 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
     XMPPJID *jid = [XMPPJID jidWithUser:self.userName domain:XMPP_DOMAIN resource:XMPP_RESOURCE];
     self.xmppStream.myJID=jid;
     
+    //判断连接状态
+    if(self.xmppStream.isConnected)
+    {
+        [self.xmppStream disconnect];
+    }
     [self.xmppStream connectWithTimeout:4.0 error:nil];
 }
 
@@ -98,9 +103,16 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
 //注册方法里没有调用auth方法
 - (void)userRegister
 {
+    [self xmppStream];
+
     //构建用户Jid
     XMPPJID *jid = [XMPPJID jidWithUser:self.userName domain:XMPP_DOMAIN resource:XMPP_RESOURCE];
     self.xmppStream.myJID=jid;
+    //判断连接状态
+    if(self.xmppStream.isConnected)
+    {
+        [self.xmppStream disconnect];
+    }
     
     [self.xmppStream connectWithTimeout:4.0 error:nil];
 }
@@ -157,11 +169,10 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
 //连接服务器成功
 - (void)xmppStreamDidConnect:(XMPPStream *)sender
 {
-    
-    
         if (self.operatingType == UserOperatingTypeLogin) {
             //进行登录
             [sender authenticateWithPassword:self.userPwd error:nil];
+            NSLog(@"执行了登录操作");
         }
         else if(self.operatingType == UserOperatingTypeRegister)
         {
@@ -175,10 +186,10 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
         }
 }
 
-//连接服务器失败
+//断开服务器连接
 - (void)xmppStreamDidDisconnect:(XMPPStream *)sender withError:(NSError *)error
 {
-    NSLog(@"连接服务器失败");
+    NSLog(@"断开服务器连接");
 }
 
 //登录失败
@@ -199,14 +210,19 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
 // 注册新用户成功时的回调
 - (void)xmppStreamDidRegister:(XMPPStream *)sender
 {
+    [[NSNotificationCenter defaultCenter]postNotificationName:USER_REGISTER_SUCCESS_NOTIFICATION object:nil];
     NSLog(@"注册新用户成功");
 }
 
 // 注册新用户失败时的回调
-- (void)xmppStream:(XMPPStream *)senderdidNotRegister:(NSXMLElement *)error
+-(void)xmppStream:(XMPPStream *)sender didNotRegister:(DDXMLElement *)error
 {
     NSLog(@"注册新用户失败");
+    [[NSNotificationCenter defaultCenter]postNotificationName:USER_REGISTER_FAIL_NOTIFICATION object:error];
 }
+
+
+
 
 #pragma mark ===== 好友模块 委托=======
 /** 收到出席订阅请求（代表对方想添加自己为好友) */
@@ -229,12 +245,17 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
     }
 }
 
+
+
+
+
+
 /**
  * 开始同步服务器发送过来的自己的好友列表
  **/
 - (void)xmppRosterDidBeginPopulating:(XMPPRoster *)sender
 {
-    
+    NSLog(@"xmppRosterDidBeginPopulating");
 }
 
 /**
@@ -243,18 +264,22 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
 //收到好友列表IQ会进入的方法，并且已经存入我的存储器
 - (void)xmppRosterDidEndPopulating:(XMPPRoster *)sender
 {
+    NSLog(@"xmppRosterDidEndPopulating");
     [[NSNotificationCenter defaultCenter] postNotificationName:XMPP_ROSTER_CHANGE object:nil];
 }
+
+
 
 //收到每一个好友
 - (void)xmppRoster:(XMPPRoster *)sender didReceiveRosterItem:(NSXMLElement *)item
 {
-    
+    //NSLog(@"didReceiveRosterItem \n%@",item);
 }
 
 // 如果不是初始化同步来的roster,那么会自动存入我的好友存储器
 - (void)xmppRosterDidChange:(XMPPRosterMemoryStorage *)sender
 {
+    NSLog(@"xmppRosterDidChange");
     [[NSNotificationCenter defaultCenter] postNotificationName:XMPP_ROSTER_CHANGE object:nil];
 }
 
@@ -306,9 +331,11 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
     
 }
 
+//获取好友列表的回调
 - (BOOL)xmppStream:(XMPPStream *)sender didReceiveIQ:(XMPPIQ *)iq
 {
-    NSLog(@"iq:%@",iq);
+    NSLog(@"获取好友列表的回调？");
+    //NSLog(@"好友列表iq:%@",iq);
     // 以下两个判断其实只需要有一个就够了
     NSString *elementID = iq.elementID;
     if (![elementID isEqualToString:@"getMyRooms"]) {
@@ -331,6 +358,8 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
         }
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:XMPP_GET_GROUPS_NOTIFICATION object:array];
+    [[NSNotificationCenter defaultCenter] postNotificationName:XMPP_ROSTER_CHANGE object:array];
+
     
     return YES;
 }

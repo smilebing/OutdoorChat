@@ -524,6 +524,7 @@
 				TargetAttributes = {
 					6A37BDAA1DE804C400CDB960 = {
 						CreatedOnToolsVersion = 8.1;
+						DevelopmentTeam = QF7CR276N9;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -742,7 +743,7 @@
 			baseConfigurationReference = CA9D7C239BAE19111186B8C3 /* Pods-OutdoorChat.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = QF7CR276N9;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_ROOT}/AMap3DMap\"",
@@ -763,7 +764,7 @@
 			baseConfigurationReference = 50C3BC902148BCBC92D84028 /* Pods-OutdoorChat.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = QF7CR276N9;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_ROOT}/AMap3DMap\"",

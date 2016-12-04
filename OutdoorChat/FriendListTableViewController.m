@@ -13,7 +13,6 @@
 
 @interface FriendListTableViewController ()
 @property (nonatomic, retain) NSMutableArray    *contacts;
-
 @end
 
 @implementation FriendListTableViewController
@@ -21,6 +20,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.view.backgroundColor = [UIColor colorWithRed:234 green:239 blue:245 alpha:1];
+    
+    self.tableView.tableFooterView = [UIView new];
     
     //注册通知中心
       [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(rosterChange) name:XMPP_ROSTER_CHANGE object:nil];
@@ -31,17 +33,18 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - Table view data source
 
+#pragma mark - Table view data source
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-#warning Incomplete implementation, return the number of sections
-    return 0;
+    
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-#warning Incomplete implementation, return the number of rows
-    return 0;
+    
+    return self.contacts.count;
 }
+
 
 #pragma mark - notification event
 //好友列表变化
@@ -51,7 +54,6 @@
     self.contacts = [NSMutableArray arrayWithArray:[[XMPPTool sharedXMPPTool].xmppRosterMemoryStorage unsortedUsers]];
     [self.tableView reloadData];
     NSLog(@"收到通知");
-    //NSLog(@"%lu", (unsigned long)[self.contacts count]);
 }
 
 
@@ -60,6 +62,33 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     NSLog(@"移除 FriendList 的observer");
 }
+
+
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"contactCell" forIndexPath:indexPath];
+    
+    XMPPUserMemoryStorageObject *user = self.contacts[indexPath.row];
+    
+    UILabel *nameLabel = (UILabel *)[cell viewWithTag:1001];
+    nameLabel.text = user.jid.user;
+    
+    UILabel *statusLabel = (UILabel *)[cell viewWithTag:1002];
+    if ([user isOnline]) {
+        statusLabel.text = @"[在线]";
+        statusLabel.textColor = [UIColor blackColor];
+        nameLabel.textColor = [UIColor blackColor];
+    } else {
+        statusLabel.text = @"[离线]";
+        statusLabel.textColor = [UIColor grayColor];
+        nameLabel.textColor = [UIColor grayColor];
+    }
+    
+    return cell;
+}
+
+
+
 
 /*
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {

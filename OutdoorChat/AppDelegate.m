@@ -35,14 +35,18 @@
     self.window = [[UIWindow alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
     BOOL isLogin = [UserTool loginStatus];
     
-    if (isLogin) {
-        
-        [self setupMainViewController];
-    }else{
-        
-        UIViewController *vc = [UIStoryboard storyboardWithName:@"Login" bundle:[NSBundle mainBundle]].instantiateInitialViewController;
-        self.window.rootViewController = vc ;
-    }
+//    if (isLogin) {
+//        
+//        [self setupMainViewController];
+//    }else{
+//        
+//        UIViewController *vc = [UIStoryboard storyboardWithName:@"Login" bundle:[NSBundle mainBundle]].instantiateInitialViewController;
+//        self.window.rootViewController = vc ;
+//    }
+    
+    
+    UIViewController *vc = [UIStoryboard storyboardWithName:@"Login" bundle:[NSBundle mainBundle]].instantiateInitialViewController;
+    self.window.rootViewController = vc ;
     
     [self.window makeKeyAndVisible];
 

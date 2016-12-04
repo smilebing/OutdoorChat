@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		6A0B799A1DF01CD100E55D05 /* XMPPData.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A0B79991DF01CD100E55D05 /* XMPPData.m */; };
 		6A0B799D1DF040E200E55D05 /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A0B799C1DF040E200E55D05 /* Login.storyboard */; };
-		6A0B79A31DF0795600E55D05 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A0B79A21DF0795600E55D05 /* Main.storyboard */; };
 		6A3408D01DEC239E00D4831C /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A3408CF1DEC239E00D4831C /* LoginViewController.m */; };
 		6A3408D31DEC23AF00D4831C /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A3408D21DEC23AF00D4831C /* RegisterViewController.m */; };
 		6A3408E01DED4C0600D4831C /* RecentChatTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A3408DF1DED4C0600D4831C /* RecentChatTableViewController.m */; };
@@ -19,6 +18,7 @@
 		6A37BDBB1DE804C400CDB960 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6A37BDBA1DE804C400CDB960 /* Assets.xcassets */; };
 		6A37BDBE1DE804C400CDB960 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A37BDBC1DE804C400CDB960 /* LaunchScreen.storyboard */; };
 		6A37BDD21DE84F0200CDB960 /* XMPPTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A37BDD11DE84F0200CDB960 /* XMPPTool.m */; };
+		6A8CC93A1DF2EE37001A8EF4 /* PersonTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A8CC9391DF2EE37001A8EF4 /* PersonTableViewController.m */; };
 		75C08D1F1DF270950059E2CE /* UserTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 75C08D1E1DF270950059E2CE /* UserTool.m */; };
 		75C08D251DF2781B0059E2CE /* MainNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75C08D221DF2781B0059E2CE /* MainNavigationController.m */; };
 		75C08D261DF2781B0059E2CE /* MainTabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75C08D241DF2781B0059E2CE /* MainTabBarViewController.m */; };
@@ -37,7 +37,6 @@
 		6A0B79991DF01CD100E55D05 /* XMPPData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMPPData.m; sourceTree = "<group>"; };
 		6A0B799B1DF01CEE00E55D05 /* XMPPData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XMPPData.h; sourceTree = "<group>"; };
 		6A0B799C1DF040E200E55D05 /* Login.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Login.storyboard; path = ../Login.storyboard; sourceTree = "<group>"; };
-		6A0B79A21DF0795600E55D05 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		6A3408CE1DEC239E00D4831C /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		6A3408CF1DEC239E00D4831C /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		6A3408D11DEC23AF00D4831C /* RegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterViewController.h; sourceTree = "<group>"; };
@@ -56,6 +55,8 @@
 		6A37BDBF1DE804C400CDB960 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6A37BDD01DE84EF500CDB960 /* XMPPTool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XMPPTool.h; sourceTree = "<group>"; };
 		6A37BDD11DE84F0200CDB960 /* XMPPTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMPPTool.m; sourceTree = "<group>"; };
+		6A8CC9381DF2EE37001A8EF4 /* PersonTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonTableViewController.h; sourceTree = "<group>"; };
+		6A8CC9391DF2EE37001A8EF4 /* PersonTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonTableViewController.m; sourceTree = "<group>"; };
 		75C08D1D1DF270950059E2CE /* UserTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserTool.h; sourceTree = "<group>"; };
 		75C08D1E1DF270950059E2CE /* UserTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserTool.m; sourceTree = "<group>"; };
 		75C08D211DF2781B0059E2CE /* MainNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainNavigationController.h; sourceTree = "<group>"; };
@@ -111,14 +112,6 @@
 				6A0B799C1DF040E200E55D05 /* Login.storyboard */,
 			);
 			name = Login;
-			sourceTree = "<group>";
-		};
-		6A0B79A01DF0426700E55D05 /* Main */ = {
-			isa = PBXGroup;
-			children = (
-				6A0B79A21DF0795600E55D05 /* Main.storyboard */,
-			);
-			name = Main;
 			sourceTree = "<group>";
 		};
 		6A0B79A11DF0429900E55D05 /* Others */ = {
@@ -206,7 +199,6 @@
 				75C08D2A1DF279340059E2CE /* Recent */,
 				75C08D281DF279140059E2CE /* Map */,
 				75C08D271DF279080059E2CE /* Personal */,
-				6A0B79A01DF0426700E55D05 /* Main */,
 				6A0B799F1DF0425F00E55D05 /* Login */,
 			);
 			name = StoryBorad;
@@ -467,6 +459,8 @@
 		75C08D4C1DF280B60059E2CE /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				6A8CC9381DF2EE37001A8EF4 /* PersonTableViewController.h */,
+				6A8CC9391DF2EE37001A8EF4 /* PersonTableViewController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -563,7 +557,6 @@
 				6A37BDBB1DE804C400CDB960 /* Assets.xcassets in Resources */,
 				75C08D321DF27A990059E2CE /* Friend.storyboard in Resources */,
 				6A0B799D1DF040E200E55D05 /* Login.storyboard in Resources */,
-				6A0B79A31DF0795600E55D05 /* Main.storyboard in Resources */,
 				75C08D531DF29B1F0059E2CE /* tabbar_friend@2x.png in Resources */,
 				75C08D301DF27A1B0059E2CE /* Map.storyboard in Resources */,
 			);
@@ -624,6 +617,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6A8CC93A1DF2EE37001A8EF4 /* PersonTableViewController.m in Sources */,
 				6A3408D31DEC23AF00D4831C /* RegisterViewController.m in Sources */,
 				6A37BDB31DE804C400CDB960 /* AppDelegate.m in Sources */,
 				6A3408E01DED4C0600D4831C /* RecentChatTableViewController.m in Sources */,

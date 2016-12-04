@@ -29,7 +29,6 @@ NSString *const kXMPPmyPassword = @"kXMPPmyPassword";
 @implementation LoginViewController
 
 - (void)dealloc{
-    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -41,7 +40,6 @@ NSString *const kXMPPmyPassword = @"kXMPPmyPassword";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     [self setupUI];
     [self registerObersver];
 }
@@ -83,7 +81,8 @@ NSString *const kXMPPmyPassword = @"kXMPPmyPassword";
     tool.userName = self.userNameTextFiled.text;
     tool.userPwd = self.passwordTextFiled.text;
     tool.operatingType = UserOperatingTypeLogin;
-    [tool loginOrRegister];
+    [tool userLogin];
+    
 }
 
 //点击空白处收回键盘
@@ -95,9 +94,9 @@ NSString *const kXMPPmyPassword = @"kXMPPmyPassword";
 #pragma mark - Private
 
 - (void)registerObersver{
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginSuccess) name:UserLoginSuccessNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginFailure) name:UserLoginFailureNotification object:nil];
+    //登录成功和失败
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginSuccess) name:USER_LOGIN_SUCCESS_NOTIFICATION object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginFailure) name:USER_LOGIN_FAIL_NOTIFICATION object:nil];
 }
 
 - (void)loginSuccess{
@@ -111,7 +110,7 @@ NSString *const kXMPPmyPassword = @"kXMPPmyPassword";
 }
 
 - (void)loginFailure{
-    
+    NSLog(@"loginFailure 即将弹出窗口提示");
     [UIAlertController showSimpleAlertControllerWithTitle:@"登录失败" message:nil parentViewController:self];
 }
 

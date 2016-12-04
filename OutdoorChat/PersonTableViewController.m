@@ -1,29 +1,29 @@
 //
-//  FriendListTableViewController.m
+//  PersonTableViewController.m
 //  OutdoorChat
 //
-//  Created by 朱贺 on 2016/11/29.
+//  Created by 朱贺 on 2016/12/3.
 //  Copyright © 2016年 朱贺. All rights reserved.
 //
 
-#import "FriendListTableViewController.h"
+#import "PersonTableViewController.h"
 #import "XMPPTool.h"
-#import "Config.h"
-
-
-@interface FriendListTableViewController ()
-@property (nonatomic, retain) NSMutableArray    *contacts;
+#import "UserTool.h"
+#import "MainNavigationController.h"
+@interface PersonTableViewController ()
 
 @end
 
-@implementation FriendListTableViewController
+@implementation PersonTableViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    // Uncomment the following line to preserve selection between presentations.
+    // self.clearsSelectionOnViewWillAppear = NO;
     
-    //注册通知中心
-      [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(rosterChange) name:XMPP_ROSTER_CHANGE object:nil];
+    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -43,27 +43,25 @@
     return 0;
 }
 
-#pragma mark - notification event
-//好友列表变化
-- (void)rosterChange
-{
-    //从存储器中取出我得好友数组，更新数据源
-    self.contacts = [NSMutableArray arrayWithArray:[[XMPPTool sharedXMPPTool].xmppRosterMemoryStorage unsortedUsers]];
-    [self.tableView reloadData];
-    NSLog(@"收到通知");
-    //NSLog(@"%lu", (unsigned long)[self.contacts count]);
-}
-
-
-
--(void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    NSLog(@"移除 FriendList 的observer");
+//注销
+- (IBAction)sendOfflineToHost:(id)sender {
+    XMPPTool * xmppTool = [XMPPTool sharedXMPPTool];
+    //发送离线消息去服务器
+    [xmppTool logout];
+    //本地清空
+    [UserTool removeAll];
+    
+    //返回登录页面
+       MainNavigationController *vc = [UIStoryboard storyboardWithName:@"Login" bundle:[NSBundle mainBundle]].instantiateInitialViewController;
+    [self presentViewController:vc animated:YES completion:^{
+        
+    }];
+    
 }
 
 /*
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: forIndexPath:indexPath];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:; forIndexPath:indexPath];
     
     // Configure the cell...
     

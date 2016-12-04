@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "XMPPTool.h"
 
-@interface FriendListTableViewController : UITableViewController
+@interface FriendListTableViewController : UITableViewController<XMPPStreamDelegate>
 
 @end

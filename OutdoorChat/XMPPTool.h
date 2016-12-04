@@ -9,11 +9,19 @@
 
 
 #import <Foundation/Foundation.h>
-#import "LoginViewController.h"
+#import "Config.h"
+#import <XMPPFramework/XMPPFramework.h>
+#import <XMPPFramework/XMPPRoster.h>
+#import <XMPPFramework/XMPPMessageArchivingCoreDataStorage.h>
+#import <XMPPFramework/XMPPRosterCoreDataStorage.h>
+
+#import <XMPPFramework/XMPPRosterMemoryStorage.h>
+#import <XMPPFramework/XMPPIncomingFileTransfer.h>
+#import <XMPPFramework/XMPPAutoPing.h>
+#import <XMPPFramework/XMPPReconnect.h>
+
 #ifndef XMPPTool_h
 #define XMPPTool_h
-
-
 #endif /* XMPPTool_h */
 
 
@@ -31,11 +39,26 @@ UIKIT_EXTERN NSString *const UserRegisterFailureNotificatiion; //注册失败
 UIKIT_EXTERN NSString *const UserLogoutNotification; //注销的通知
 UIKIT_EXTERN NSString *const UserConnectTimeout; //连接超时
 
-@interface XMPPTool : NSObject
+@interface XMPPTool : NSObject <XMPPStreamDelegate,XMPPRosterDelegate,XMPPRosterMemoryStorageDelegate,XMPPIncomingFileTransferDelegate>
 @property (nonatomic,retain)NSString *  userName;//用户名
 @property (nonatomic,retain)NSString *  userPwd;//密码
 @property (nonatomic,assign)UserOperatingType operatingType;//判断是登录还是注册
-@property LoginViewController * loginView;
+
+
+@property(nonatomic,retain)XMPPStream *xmppStream;//通道
+@property (nonatomic, strong) XMPPAutoPing *xmppAutoPing;
+@property (nonatomic, strong) XMPPReconnect *xmppReconnect;
+
+@property (nonatomic, strong) XMPPRoster *xmppRoster;
+@property (nonatomic, strong) XMPPRosterMemoryStorage *xmppRosterMemoryStorage;
+
+@property (nonatomic, strong) XMPPMessageArchiving *xmppMessageArchiving;
+@property (nonatomic, strong) XMPPMessageArchivingCoreDataStorage *xmppMessageArchivingCoreDataStorage;
+
+@property (nonatomic, strong) XMPPIncomingFileTransfer *xmppIncomingFileTransfer;
+@property (nonatomic, strong) XMPPPresence *receivePresence;
+
+
 //单例
 +(XMPPTool*)sharedXMPPTool;
 //登录注册方法
@@ -44,4 +67,14 @@ UIKIT_EXTERN NSString *const UserConnectTimeout; //连接超时
 -(void)sendOffLineToHost;
 
 -(NSArray *)getFriendList;
+
+//登录
+-(void)userLogin;
+//注册
+-(void)userRegister;
+//添加好友
+-(void)addFriend:(XMPPJID *) friendJID;
+//退出登录
+-(void)logout;
+
 @end

@@ -20,10 +20,17 @@
 #import <XMPPFramework/XMPPAutoPing.h>
 #import <XMPPFramework/XMPPReconnect.h>
 
-#ifndef XMPPTool_h
-#define XMPPTool_h
-#endif /* XMPPTool_h */
 
+typedef  enum {
+    XMPPResultTypeLoginSuccess,//登录成功
+    XMPPResultTypeLoginFail,//登录失败
+    XMPPResultTypeRegisterSuccess,//注册成功
+    XMPPResultTypeRegisterFail,//注册失败
+    XMPPResultTypeNetWorkError//网路异常
+}XMPPResultType;
+
+
+typedef void  (^XMPPResultBlock)(XMPPResultType  type ); //xmpp请求结果的block
 
 typedef NS_ENUM(NSInteger,UserOperatingType){
     
@@ -61,17 +68,11 @@ UIKIT_EXTERN NSString *const UserConnectTimeout; //连接超时
 
 //单例
 +(XMPPTool*)sharedXMPPTool;
-//登录注册方法
--(void)loginOrRegister;
-//注销登录
--(void)sendOffLineToHost;
-
--(NSArray *)getFriendList;
 
 //登录
--(void)userLogin;
+-(void)userLogin:(XMPPResultBlock)resultBlock;
 //注册
--(void)userRegister;
+-(void)userRegister:(XMPPResultBlock)resultBlock;
 //添加好友
 -(void)addFriend:(XMPPJID *) friendJID;
 //退出登录

@@ -19,7 +19,7 @@ NSString *const UserLogoutNotification = @"UserLogoutNotification";
 NSString *const UserConnectTimeout = @"UserConnectTimeout";
 
 @interface XMPPTool ()     
-
+    @property XMPPResultBlock resultBlock;
 
 @end
 
@@ -79,8 +79,11 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
 
 
 //登录
-- (void)userLogin
+- (void)userLogin:(XMPPResultBlock)resultBlock
 {
+    //先把block存起来
+    self.resultBlock=resultBlock;
+    
     // 1.建立TCP连接
     // 2.把我自己的jid与这个TCP连接绑定起来
     // 3.认证（登录：验证jid与密码是否正确，加密方式 不可能以明文发送）--（出席：怎样告诉服务器我上线，以及我得上线状态
@@ -100,9 +103,12 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
 }
 
 
-//注册方法里没有调用auth方法
-- (void)userRegister
+//注册方法
+- (void)userRegister:(XMPPResultBlock)resultBlock
 {
+    //先把block存起来
+    self.resultBlock=resultBlock;
+    
     [self xmppStream];
 
     //构建用户Jid
@@ -195,30 +201,43 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
 //登录失败
 - (void)xmppStream:(XMPPStream *)sender didNotAuthenticate:(DDXMLElement *)error
 {
+    //判断block有无值，再回调给控制器
+    if(self.resultBlock){
+        self.resultBlock(XMPPResultTypeLoginFail);
+    }
     NSLog(@"登录失败 %@",error);
-    [[NSNotificationCenter defaultCenter]postNotificationName:USER_LOGIN_FAIL_NOTIFICATION object:error];
 }
 
 //登录成功
 - (void)xmppStreamDidAuthenticate:(XMPPStream *)sender
 {
+    //发送上线信息
     [self goOnline];
-    [[NSNotificationCenter defaultCenter] postNotificationName:USER_LOGIN_SUCCESS_NOTIFICATION object:nil];
+    //判断block有无值，再回调给控制器
+    if(self.resultBlock){
+        self.resultBlock(XMPPResultTypeLoginSuccess);
+    }
     NSLog(@"登录成功");
 }
 
 // 注册新用户成功时的回调
 - (void)xmppStreamDidRegister:(XMPPStream *)sender
 {
-    [[NSNotificationCenter defaultCenter]postNotificationName:USER_REGISTER_SUCCESS_NOTIFICATION object:nil];
+    //判断block有无值，再回调给控制器
+    if(self.resultBlock){
+        self.resultBlock(XMPPResultTypeRegisterSuccess);
+    }
     NSLog(@"注册新用户成功");
 }
 
 // 注册新用户失败时的回调
 -(void)xmppStream:(XMPPStream *)sender didNotRegister:(DDXMLElement *)error
 {
+    //判断block有无值，再回调给控制器
+    if(self.resultBlock){
+        self.resultBlock(XMPPResultTypeRegisterFail);
+    }
     NSLog(@"注册新用户失败");
-    [[NSNotificationCenter defaultCenter]postNotificationName:USER_REGISTER_FAIL_NOTIFICATION object:error];
 }
 
 
@@ -377,8 +396,14 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
 
 
 
+typedef int (^myBlock)(int a,int b);
 
-
+-(void)test{
+    myBlock a;
+    a=^(int a,int b){return a+b;};
+    int sum=a(1,2);
+    NSLog(@"%d ",sum);
+}
 
 
 

@@ -28,9 +28,6 @@ NSString *const kXMPPmyPassword = @"kXMPPmyPassword";
 
 @implementation LoginViewController
 
-- (void)dealloc{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
 
 -(void) viewWillAppear:(BOOL)animated{
     
@@ -41,7 +38,6 @@ NSString *const kXMPPmyPassword = @"kXMPPmyPassword";
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setupUI];
-    [self registerObersver];
 }
 
 #pragma mark - Layout
@@ -63,7 +59,6 @@ NSString *const kXMPPmyPassword = @"kXMPPmyPassword";
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 
@@ -81,7 +76,23 @@ NSString *const kXMPPmyPassword = @"kXMPPmyPassword";
     tool.userName = self.userNameTextFiled.text;
     tool.userPwd = self.passwordTextFiled.text;
     tool.operatingType = UserOperatingTypeLogin;
-    [tool userLogin];
+    
+    [tool userLogin:^(XMPPResultType type) {
+        switch (type) {
+            case XMPPResultTypeLoginSuccess:
+                //登录成功
+                NSLog(@"result login success");
+                [self loginSuccess];
+                break;
+            case XMPPResultTypeLoginFail:
+                //登录失败
+                NSLog(@"result login fail");
+                [self loginFailure];
+                break;
+            default:
+                break;
+        }
+    }];
     
 }
 
@@ -90,16 +101,7 @@ NSString *const kXMPPmyPassword = @"kXMPPmyPassword";
     [self.view endEditing:YES];
 }
 
-#pragma mark - Observer
-
-- (void)registerObersver{
-    //登录成功和失败
-    NSError * error=nil;
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginSuccess) name:USER_LOGIN_SUCCESS_NOTIFICATION object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginFailure:)name:USER_LOGIN_FAIL_NOTIFICATION object:error ];
-}
-
-
+//登录成功，显示主界面
 - (void)loginSuccess{
     AppDelegate *delegate = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     [delegate setupMainViewController];
@@ -108,8 +110,8 @@ NSString *const kXMPPmyPassword = @"kXMPPmyPassword";
     [UserTool saveLoginStatus:YES];
 }
 
-- (void)loginFailure:(NSNotification *)noti{
-    //NSError * error =noti.object;
+//登录失败，提示错误信息
+- (void)loginFailure{
     //NSLog(@"这是登录错误内容 %@",error);
     [UIAlertController showSimpleAlertControllerWithTitle:@"登录失败" message:@"请检查用户名或者密码" parentViewController:self];
 }

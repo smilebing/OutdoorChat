@@ -22,15 +22,11 @@
 @implementation RegisterViewController
 
 
-- (void)dealloc{
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSLog(@"register view lodad");
-    [self registerOberserver];
+
     UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardHide:)];
     //设置成NO表示当前控件响应后会传播到其他控件上，默认为YES。
     tapGestureRecognizer.cancelsTouchesInView = NO;
@@ -56,7 +52,22 @@
     tool.userName = self.userNameTextField.text;
     tool.userPwd = self.passwordTextField.text;
     tool.operatingType = UserOperatingTypeRegister;
-    [tool userRegister];
+    //查看注册的结果
+    [tool userRegister:^(XMPPResultType type) {
+        switch (type) {
+            case XMPPResultTypeRegisterSuccess:
+                NSLog(@"result register success");
+                [self registerSuccess];
+                break;
+            
+            case XMPPResultTypeRegisterFail:
+                NSLog(@"result register fail");
+                [self registerFailure];
+                break;
+            default:
+                break;
+        }
+    }  ];
     
 }
 
@@ -67,16 +78,6 @@
     
 }
 
-#pragma mark - Oberserver
-
-- (void)registerOberserver{
-    NSError * error=nil;
-
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(registerFailure:) name:USER_REGISTER_FAIL_NOTIFICATION object:error];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(registerSuccess) name:USER_REGISTER_SUCCESS_NOTIFICATION object:nil];
-}
-
 
 #pragma mark 注册结果
 //注册成功
@@ -85,8 +86,7 @@
 }
 
 //注册失败
-- (void)registerFailure:(NSNotification *)noti{
-    //NSError * error =noti.object;
+- (void)registerFailure{
     //NSLog(@"注册失败 %@",error);
     [UIAlertController showSimpleAlertControllerWithTitle:@"注册失败" message:@"用户已经存在" parentViewController:self];
 }

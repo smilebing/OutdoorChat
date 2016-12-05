@@ -21,6 +21,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    NSLog(@"PersonTableViewController  load");
        
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -33,6 +34,12 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+-(void)viewDidDisappear:(BOOL)animated
+{
+    NSLog(@"PersonTableViewController  viewDidDisappear");
+}
+
 
 #pragma mark - Table view data source
 

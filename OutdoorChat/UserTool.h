@@ -60,5 +60,11 @@
  */
 + (void)removeAll;
 
+//清除本地的用户密码
++(void)removePwd;
+/**
+ 保存用户数据去沙盒
+ */
+//+ (void)saveUserInfoToSanbox;
 
 @end

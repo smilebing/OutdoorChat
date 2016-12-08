@@ -7,7 +7,7 @@
 //
 
 #import "XMPPTool.h"
-
+#import "UserTool.h"
 
 
 
@@ -88,10 +88,10 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
     // 2.把我自己的jid与这个TCP连接绑定起来
     // 3.认证（登录：验证jid与密码是否正确，加密方式 不可能以明文发送）--（出席：怎样告诉服务器我上线，以及我得上线状态
     //这句话会在xmppStream以后发送XML的时候加上 <message from="JID">
-    NSLog(@"userLogin");
+    WCLog(@"userLogin");
     [self xmppStream];
     //构建用户Jid
-    XMPPJID *jid = [XMPPJID jidWithUser:self.userName domain:XMPP_DOMAIN resource:XMPP_RESOURCE];
+    XMPPJID *jid = [XMPPJID jidWithUser:[UserTool userName] domain:XMPP_DOMAIN resource:XMPP_RESOURCE];
     self.xmppStream.myJID=jid;
     
     //判断连接状态
@@ -162,14 +162,14 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
     [self.xmppMessageArchiving deactivate];
     [self.xmppIncomingFileTransfer deactivate];
     self.xmppStream = nil;
-    NSLog(@"注销成功");
+    WCLog(@"注销成功");
 }
 
 #pragma mark ===== XMPPStream delegate =======
 //socket 连接建立成功
 - (void)xmppStream:(XMPPStream *)sender socketDidConnect:(GCDAsyncSocket *)socket
 {
-    NSLog(@"%s",__func__);
+    WCLog(@"%s",__func__);
 }
 
 //连接服务器成功
@@ -177,25 +177,31 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
 {
         if (self.operatingType == UserOperatingTypeLogin) {
             //进行登录
-            [sender authenticateWithPassword:self.userPwd error:nil];
-            NSLog(@"执行了登录操作");
+            [sender authenticateWithPassword:[UserTool password] error:nil];
+            WCLog(@"执行了登录操作");
         }
         else if(self.operatingType == UserOperatingTypeRegister)
         {
             //注册操作
-            [sender registerWithPassword:self.userPwd error:nil];
-            NSLog(@"执行了注册操作");
+            [sender registerWithPassword:[UserTool password] error:nil];
+            WCLog(@"执行了注册操作");
         }
         else
         {
-            NSLog(@"没有赋枚举值，不知道你要干啥");
+            WCLog(@"没有赋枚举值，不知道你要干啥");
         }
 }
 
-//断开服务器连接
+#pragma mark 与主机断开连接
 - (void)xmppStreamDidDisconnect:(XMPPStream *)sender withError:(NSError *)error
 {
-    NSLog(@"断开服务器连接");
+    //如果有错误，代表连接失败
+    //如果没有错误，表示正常的断开连接
+    if(error &&_resultBlock)
+    {
+        _resultBlock(XMPPResultTypeNetWorkError);
+    }
+    WCLog(@"与服务器断开连接%@",error);
 }
 
 //登录失败
@@ -205,7 +211,7 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
     if(self.resultBlock){
         self.resultBlock(XMPPResultTypeLoginFail);
     }
-    NSLog(@"登录失败 %@",error);
+    WCLog(@"登录失败 %@",error);
 }
 
 //登录成功
@@ -217,7 +223,7 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
     if(self.resultBlock){
         self.resultBlock(XMPPResultTypeLoginSuccess);
     }
-    NSLog(@"登录成功");
+    WCLog(@"登录成功");
 }
 
 // 注册新用户成功时的回调
@@ -227,7 +233,7 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
     if(self.resultBlock){
         self.resultBlock(XMPPResultTypeRegisterSuccess);
     }
-    NSLog(@"注册新用户成功");
+    WCLog(@"注册新用户成功");
 }
 
 // 注册新用户失败时的回调
@@ -237,7 +243,7 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
     if(self.resultBlock){
         self.resultBlock(XMPPResultTypeRegisterFail);
     }
-    NSLog(@"注册新用户失败");
+    WCLog(@"注册新用户失败");
 }
 
 
@@ -266,15 +272,12 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
 
 
 
-
-
-
 /**
  * 开始同步服务器发送过来的自己的好友列表
  **/
 - (void)xmppRosterDidBeginPopulating:(XMPPRoster *)sender
 {
-    NSLog(@"xmppRosterDidBeginPopulating");
+    WCLog(@"xmppRosterDidBeginPopulating");
 }
 
 /**
@@ -283,7 +286,7 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
 //收到好友列表IQ会进入的方法，并且已经存入我的存储器
 - (void)xmppRosterDidEndPopulating:(XMPPRoster *)sender
 {
-    NSLog(@"xmppRosterDidEndPopulating");
+    WCLog(@"xmppRosterDidEndPopulating");
     [[NSNotificationCenter defaultCenter] postNotificationName:XMPP_ROSTER_CHANGE object:nil];
 }
 
@@ -292,13 +295,13 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
 //收到每一个好友
 - (void)xmppRoster:(XMPPRoster *)sender didReceiveRosterItem:(NSXMLElement *)item
 {
-    //NSLog(@"didReceiveRosterItem \n%@",item);
+    //WCLog(@"didReceiveRosterItem \n%@",item);
 }
 
 // 如果不是初始化同步来的roster,那么会自动存入我的好友存储器
 - (void)xmppRosterDidChange:(XMPPRosterMemoryStorage *)sender
 {
-    NSLog(@"xmppRosterDidChange");
+    WCLog(@"xmppRosterDidChange");
     [[NSNotificationCenter defaultCenter] postNotificationName:XMPP_ROSTER_CHANGE object:nil];
 }
 
@@ -306,7 +309,7 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
 /** 是否同意对方发文件给我 */
 - (void)xmppIncomingFileTransfer:(XMPPIncomingFileTransfer *)sender didReceiveSIOffer:(XMPPIQ *)offer
 {
-    NSLog(@"%s",__FUNCTION__);
+    WCLog(@"%s",__FUNCTION__);
     //弹出一个是否接收的询问框
     //    [self.xmppIncomingFileTransfer acceptSIOffer:offer];
 }
@@ -315,7 +318,7 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
 //{
 //    XMPPJID * jid=[sender ]
 //    //XMPPJID *jid = [sender.senderJID copy];
-//    NSLog(@"%s",__FUNCTION__);
+//    WCLog(@"%s",__FUNCTION__);
 //    //在这个方法里面，我们通过带外来传输的文件
 //    //因此我们的消息同步器，不会帮我们自动生成Message,因此我们需要手动存储message
 //    //根据文件后缀名，判断文件我们是否能够处理，如果不能处理则直接显示。
@@ -344,8 +347,8 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
 #pragma mark - Message
 - (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message
 {
-    NSLog(@"收到信息");
-    NSLog(@"%s--%@",__FUNCTION__, message);
+    WCLog(@"收到信息");
+    WCLog(@"%s--%@",__FUNCTION__, message);
     //XEP--0136 已经用coreData实现了数据的接收和保存
     
 }
@@ -353,8 +356,8 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
 //获取好友列表的回调
 - (BOOL)xmppStream:(XMPPStream *)sender didReceiveIQ:(XMPPIQ *)iq
 {
-    NSLog(@"获取好友列表的回调？");
-    //NSLog(@"好友列表iq:%@",iq);
+    WCLog(@"获取好友列表的回调");
+    //WCLog(@"好友列表iq:%@",iq);
     // 以下两个判断其实只需要有一个就够了
     NSString *elementID = iq.elementID;
     if (![elementID isEqualToString:@"getMyRooms"]) {
@@ -376,18 +379,21 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
             }
         }
     }
+    
+    //发送通知，FriendListView接受
     [[NSNotificationCenter defaultCenter] postNotificationName:XMPP_GET_GROUPS_NOTIFICATION object:array];
     [[NSNotificationCenter defaultCenter] postNotificationName:XMPP_ROSTER_CHANGE object:array];
 
-    
     return YES;
 }
+
+
 
 #pragma mark - UIAlertViewDelegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex == 0) {
-        NSLog(@"0000");
+        WCLog(@"0000");
         [self.xmppRoster rejectPresenceSubscriptionRequestFrom:_receivePresence.from];
     } else {
         [self.xmppRoster acceptPresenceSubscriptionRequestFrom:_receivePresence.from andAddToRoster:YES];
@@ -396,209 +402,5 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
 
 
 
-typedef int (^myBlock)(int a,int b);
-
--(void)test{
-    myBlock a;
-    a=^(int a,int b){return a+b;};
-    int sum=a(1,2);
-    NSLog(@"%d ",sum);
-}
-
-
-
-
-//
-//
-//
-////设置通道连接服务器的方法
-//-(void)setStreamAndConnSever
-//{
-//    _myStream = [[XMPPStream alloc]init];
-//    
-//    _myStream.hostName = @"127.0.0.1";
-//    _myStream.hostPort = 5222;
-//    //设置代理
-//    [_myStream addDelegate:self delegateQueue:dispatch_get_main_queue()];
-//    
-//    
-//    // 3.好友模块 支持我们管理、同步、申请、删除好友
-//    _xmppRosterMemoryStorage = [[XMPPRosterMemoryStorage alloc] init];
-//    _rosterModule = [[XMPPRoster alloc] initWithRosterStorage:_xmppRosterMemoryStorage];
-//    [_rosterModule activate:self.myStream];
-//    
-//    //同时给_xmppRosterMemoryStorage 和 _xmppRoster都添加了代理
-//    [_rosterModule addDelegate:self delegateQueue:dispatch_get_main_queue()];
-//    //设置好友同步策略,XMPP一旦连接成功，同步好友到本地
-//    [_rosterModule setAutoFetchRoster:YES]; //自动同步，从服务器取出好友
-//    //关掉自动接收好友请求，默认开启自动同意
-//    [_rosterModule setAutoAcceptKnownPresenceSubscriptionRequests:NO];
-//    NSLog(@"roster finish")  ;
-//    
-//}
-//
-///**
-// * 同步结束
-// **/
-////收到好友列表IQ会进入的方法，并且已经存入我的存储器
-////- (void)xmppRosterDidEndPopulating:(XMPPRoster *)sender
-////{
-////    [[NSNotificationCenter defaultCenter] postNotificationName:kXMPP_ROSTER_CHANGE object:nil];
-////}
-////
-////#pragma mark - notification event
-////- (void)rosterChange
-////{
-////    //从存储器中取出我得好友数组，更新数据源
-////    self.contacts = [NSMutableArray arrayWithArray:[JKXMPPTool sharedInstance].xmppRosterMemoryStorage.unsortedUsers];
-////    [self.tableView reloadData];
-////    
-////}
-//
-////登录或者注册
-//-(void)loginOrRegister
-//{
-//    if (!_myStream) {
-//        [self setStreamAndConnSever];
-//    }
-//    
-//    //构建用户Jid
-//    XMPPJID *jid = [XMPPJID jidWithUser:self.userName domain:@"127.0.0.1" resource:@"iPhone"];
-//    
-//    //设置通道属性
-//    _myStream.myJID = jid;
-//    
-//    //判断当前连接状态,已经连了就先断开
-//    if (_myStream.isConnected) {
-//        [_myStream disconnect];
-//    }
-//    
-//
-//    //连接服务器
-//    NSError *error = nil;
-//     [_myStream connectWithTimeout:5 error:&error];
-//    if (error) {
-//        NSLog(@"连接失败");
-//        [[NSNotificationCenter defaultCenter]postNotificationName: UserConnectTimeout object:nil];
-//    }
-//}
-//
-//#pragma mark -- xmpp代理
-////连接成功的代理方法
-//-(void)xmppStreamDidConnect:(XMPPStream *)sender
-//{
-//
-//    if (self.operatingType == UserOperatingTypeLogin) {
-//        //进行登录
-//        [sender authenticateWithPassword:self.userPwd error:nil];
-//    }
-//    else if(self.operatingType == UserOperatingTypeRegister)
-//    {
-//        //注册操作
-//        
-//        [sender registerWithPassword:self.userPwd error:nil];
-//        NSLog(@"执行了注册操作");
-//    }
-//    else
-//    {
-//        NSLog(@"没有赋枚举值，不知道你要干啥");
-//    }
-//}
-//
-////连接超时
-//-(void)xmppStreamConnectDidTimeout:(XMPPStream *)sender
-//{
-//    NSLog(@"连接超时");
-//}
-//
-//#pragma mark -- 登录的协议方法
-//-(void)xmppStreamDidAuthenticate:(XMPPStream *)sender
-//{
-//    NSLog(@"登录成功");
-//    //密码进入userDefault
-//    [[NSNotificationCenter defaultCenter] postNotificationName:UserLoginSuccessNotification object:nil];
-//    //设置在线状态
-//    XMPPPresence * pre = [XMPPPresence presence];
-//    [self.myStream sendElement:pre];
-//    
-// 
-//}
-//
-//
-//-(void)xmppStream:(XMPPStream *)sender didNotAuthenticate:(DDXMLElement *)error
-//{
-//    NSLog(@"登录失败");
-//}
-//
-//
-//
-//
-//#pragma mark -- 注册的协议方法
-//-(void)xmppStreamDidRegister:(XMPPStream *)sender
-//{
-//    NSLog(@"注册成功");
-//    [[NSNotificationCenter defaultCenter] postNotificationName:UserRegisterSuccessNotification object:nil];
-//}
-//-(void)xmppStream:(XMPPStream *)sender didNotRegister:(DDXMLElement *)error
-//{
-//    NSLog(@"注册失败");
-//    [[NSNotificationCenter defaultCenter] postNotificationName:UserRegisterFailureNotificatiion object:nil];
-//}
-//
-////发送离线信息
-//-(void)sendOffLineToHost{
-//    // 1." 发送 "离线" 消息",不设置type的默认是available
-//    XMPPPresence *offline = [XMPPPresence presenceWithType:@"unavailable"];
-//    [_myStream sendElement:offline];
-//    // 2. 与服务器断开连接
-//    [_myStream disconnect];
-//    NSLog(@"注销成功");
-//}
-//
-///**
-// * 同步结束
-// **/
-////收到好友列表IQ会进入的方法，并且已经存入我的存储器
-//- (void)xmppRosterDidEndPopulating:(XMPPRoster *)sender
-//{
-//    [[NSNotificationCenter defaultCenter] postNotificationName:XMPP_ROSTER_CHANGE object:nil];
-//}
-//
-//// 如果不是初始化同步来的roster,那么会自动存入我的好友存储器
-//- (void)xmppRosterDidChange:(XMPPRosterMemoryStorage *)sender
-//{
-//    [[NSNotificationCenter defaultCenter] postNotificationName:XMPP_ROSTER_CHANGE object:nil];
-//}
-//
-//
-////获取当前屏幕显示的viewcontroller
-//- (UIViewController *)getCurrentVC
-//{
-//    UIViewController *result = nil;
-//    
-//    UIWindow * window = [[UIApplication sharedApplication] keyWindow];
-//    if (window.windowLevel != UIWindowLevelNormal)
-//    {
-//        NSArray *windows = [[UIApplication sharedApplication] windows];
-//        for(UIWindow * tmpWin in windows)
-//        {
-//            if (tmpWin.windowLevel == UIWindowLevelNormal)
-//            {
-//                window = tmpWin;
-//                break;
-//            }
-//        }
-//    }
-//    
-//    UIView *frontView = [[window subviews] objectAtIndex:0];
-//    id nextResponder = [frontView nextResponder];
-//    
-//    if ([nextResponder isKindOfClass:[UIViewController class]])
-//        result = nextResponder;
-//    else
-//        result = window.rootViewController;
-//    
-//    return result;
-//}
 
 @end

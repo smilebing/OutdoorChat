@@ -21,8 +21,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    NSLog(@"PersonTableViewController  load");
-       
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
@@ -37,7 +35,6 @@
 
 -(void)viewDidDisappear:(BOOL)animated
 {
-    NSLog(@"PersonTableViewController  viewDidDisappear");
 }
 
 
@@ -58,9 +55,9 @@
     XMPPTool * xmppTool = [XMPPTool sharedXMPPTool];
     //发送离线消息去服务器
     [xmppTool logout];
-    //本地清空
-    [UserTool removeAll];
-    
+    //本地清空用户密码
+    //[UserTool removeAll];
+    [UserTool removePwd];
     //返回登录页面
        MainNavigationController *vc = [UIStoryboard storyboardWithName:@"Login" bundle:[NSBundle mainBundle]].instantiateInitialViewController;
     [self presentViewController:vc animated:YES completion:^{

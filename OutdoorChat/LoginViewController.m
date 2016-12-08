@@ -31,13 +31,19 @@ NSString *const kXMPPmyPassword = @"kXMPPmyPassword";
 
 -(void) viewWillAppear:(BOOL)animated{
     
-    self.userNameTextFiled.text = [UserTool userName];
-    self.passwordTextFiled.text = [UserTool password];
+    //self.userNameTextFiled.text = [UserTool userName];
+    //self.passwordTextFiled.text = [UserTool password];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setupUI];
+    //从沙盒中读取用户名
+    self.userNameTextFiled.text=[UserTool userName];
+
+    
+//    NSString * user=[[NSUserDefaults standardUserDefaults]objectForKey:@"userName"];
+//    self.userNameTextFiled.text=user;
 }
 
 #pragma mark - Layout
@@ -66,18 +72,41 @@ NSString *const kXMPPmyPassword = @"kXMPPmyPassword";
 
 - (IBAction)loginButtonDidClicked:(id)sender {
     
+   
+    
     [self.view endEditing:YES];
     if (!(self.userNameTextFiled.text.length && self.passwordTextFiled.text.length)) {
         [UIAlertController showSimpleAlertControllerWithTitle:@"请输入完整信息" message:nil parentViewController:self];
     }
     
+    
+    //将用户名密码存放到沙盒
+    NSString * user =self.userNameTextFiled.text;
+    NSString * pwd =self.passwordTextFiled.text;
+    
+    [UserTool saveUserName:user];
+    [UserTool savePassword:pwd];
+
+    
     //登录接口
     XMPPTool *tool =[XMPPTool sharedXMPPTool];
-    tool.userName = self.userNameTextFiled.text;
-    tool.userPwd = self.passwordTextFiled.text;
+    //tool.userName = self.userNameTextFiled.text;
+    //tool.userPwd = self.passwordTextFiled.text;
     tool.operatingType = UserOperatingTypeLogin;
     
+    
+    __weak typeof (self) selfVc=self;
+    //登录之前提示
+    
     [tool userLogin:^(XMPPResultType type) {
+        [selfVc handleResultType:type];
+            }];
+    
+}
+
+//处理结果
+-(void)handleResultType:(XMPPResultType)type{
+    dispatch_async(dispatch_get_main_queue(), ^{
         switch (type) {
             case XMPPResultTypeLoginSuccess:
                 //登录成功
@@ -89,11 +118,14 @@ NSString *const kXMPPmyPassword = @"kXMPPmyPassword";
                 NSLog(@"result login fail");
                 [self loginFailure];
                 break;
+            case XMPPResultTypeNetWorkError:
+                NSLog(@"网路超时");
+                [self networkError];
             default:
                 break;
         }
-    }];
-    
+
+    });
 }
 
 //点击空白处收回键盘
@@ -103,11 +135,16 @@ NSString *const kXMPPmyPassword = @"kXMPPmyPassword";
 
 //登录成功，显示主界面
 - (void)loginSuccess{
+    //保存用户登录成功数据
+    [UserTool saveLoginStatus:YES];
+    
+    //隐藏模态窗口
+    [self dismissViewControllerAnimated:YES completion:nil];
     AppDelegate *delegate = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     [delegate setupMainViewController];
-    [UserTool savePassword:self.passwordTextFiled.text];
-    [UserTool saveUserName:self.userNameTextFiled.text];
-    [UserTool saveLoginStatus:YES];
+//    [UserTool savePassword:self.passwordTextFiled.text];
+//    [UserTool saveUserName:self.userNameTextFiled.text];
+//    [UserTool saveLoginStatus:YES];
 }
 
 //登录失败，提示错误信息
@@ -116,4 +153,12 @@ NSString *const kXMPPmyPassword = @"kXMPPmyPassword";
     [UIAlertController showSimpleAlertControllerWithTitle:@"登录失败" message:@"请检查用户名或者密码" parentViewController:self];
 }
 
+//网路超时
+-(void)networkError{
+     [UIAlertController showSimpleAlertControllerWithTitle:@"登录失败" message:@"网络不稳定" parentViewController:self];
+}
+
+-(void)dealloc{
+    NSLog(@"dealloc");
+}
 @end

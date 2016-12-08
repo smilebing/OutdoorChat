@@ -17,6 +17,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    MainNavigationController *recent = [UIStoryboard storyboardWithName:@"Recent" bundle:[NSBundle mainBundle]].instantiateInitialViewController;
+    [self addOneSubViewController:recent title:@"最近" imageName:nil selectedImageName:nil];
     MainNavigationController *friend = [UIStoryboard storyboardWithName:@"Friend" bundle:[NSBundle mainBundle]].instantiateInitialViewController;
     [self addOneSubViewController:friend title:@"联系人" imageName:@"tabbar_friend" selectedImageName:nil];
     
@@ -25,8 +28,7 @@
     
     
     
-    MainNavigationController *recent = [UIStoryboard storyboardWithName:@"Recent" bundle:[NSBundle mainBundle]].instantiateInitialViewController;
-    [self addOneSubViewController:recent title:@"最近" imageName:nil selectedImageName:nil];
+  
     
     MainNavigationController *personal = [UIStoryboard storyboardWithName:@"Personal" bundle:[NSBundle mainBundle]].instantiateInitialViewController;
     [self addOneSubViewController:personal title:@"我" imageName:nil selectedImageName:nil];

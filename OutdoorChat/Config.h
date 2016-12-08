@@ -22,15 +22,17 @@
 //通知
 #define XMPP_ROSTER_CHANGE @"XMPP_ROSTER_CHANGE"
 //*********************** 通知 *****************
-#define USER_LOGIN_SUCCESS_NOTIFICATION     @"LOGIN_SUCCESS"
-#define USER_LOGIN_FAIL_NOTIFICATION     @"LOGIN_FAIL"
-
-#define USER_REGISTER_SUCCESS_NOTIFICATION      @"REGISTER_SUCCESS"
-#define USER_REGISTER_FAIL_NOTIFICATION @"REGISTER_FAIL"
-
-
 
 #define XMPP_ROSTER_CHANGE_NOTIFICATION @"XMPP_ROSTER_CHANGE"
 #define XMPP_MESSAGE_CHANGE_NOTIFICATION @"XMPP_MESSAGE_CHANGE"
 #define XMPP_GET_GROUPS_NOTIFICATION     @"XMPP_GET_GROUPS"
+
+//自定义Log
+#ifdef DEBUG
+#define WCLog(...) NSLog(@"%s \n %@ \n\n",__func__,[NSString stringWithFormat:__VA_ARGS__])
+#else
+#define WCLog(...)
+#endif
+
+
 #endif /* Config_h */

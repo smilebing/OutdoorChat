@@ -21,10 +21,8 @@
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 
-//XMPP数据流
-@property (strong, nonatomic) XMPPStream * xmppStream;
-@property (strong, nonatomic) NSManagedObjectContext *xmppManagedObjectContext;
-@property (strong, nonatomic) NSManagedObjectContext *xmppRosterManagedObjectContext;
+
+
 
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;

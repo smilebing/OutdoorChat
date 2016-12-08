@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6A0B799A1DF01CD100E55D05 /* XMPPData.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A0B79991DF01CD100E55D05 /* XMPPData.m */; };
 		6A0B799D1DF040E200E55D05 /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A0B799C1DF040E200E55D05 /* Login.storyboard */; };
 		6A3408D01DEC239E00D4831C /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A3408CF1DEC239E00D4831C /* LoginViewController.m */; };
 		6A3408D31DEC23AF00D4831C /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A3408D21DEC23AF00D4831C /* RegisterViewController.m */; };
@@ -19,6 +18,7 @@
 		6A37BDBE1DE804C400CDB960 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A37BDBC1DE804C400CDB960 /* LaunchScreen.storyboard */; };
 		6A37BDD21DE84F0200CDB960 /* XMPPTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A37BDD11DE84F0200CDB960 /* XMPPTool.m */; };
 		6A8CC93A1DF2EE37001A8EF4 /* PersonTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A8CC9391DF2EE37001A8EF4 /* PersonTableViewController.m */; };
+		6A8CC9551DF93F87001A8EF4 /* FriendListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A8CC9541DF93F87001A8EF4 /* FriendListModel.m */; };
 		75C08D1F1DF270950059E2CE /* UserTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 75C08D1E1DF270950059E2CE /* UserTool.m */; };
 		75C08D251DF2781B0059E2CE /* MainNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75C08D221DF2781B0059E2CE /* MainNavigationController.m */; };
 		75C08D261DF2781B0059E2CE /* MainTabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75C08D241DF2781B0059E2CE /* MainTabBarViewController.m */; };
@@ -34,8 +34,6 @@
 /* Begin PBXFileReference section */
 		50C3BC902148BCBC92D84028 /* Pods-OutdoorChat.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OutdoorChat.release.xcconfig"; path = "Pods/Target Support Files/Pods-OutdoorChat/Pods-OutdoorChat.release.xcconfig"; sourceTree = "<group>"; };
 		56690C988A48237A716BB04A /* Pods_OutdoorChat.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OutdoorChat.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		6A0B79991DF01CD100E55D05 /* XMPPData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMPPData.m; sourceTree = "<group>"; };
-		6A0B799B1DF01CEE00E55D05 /* XMPPData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XMPPData.h; sourceTree = "<group>"; };
 		6A0B799C1DF040E200E55D05 /* Login.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Login.storyboard; path = ../Login.storyboard; sourceTree = "<group>"; };
 		6A3408CE1DEC239E00D4831C /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		6A3408CF1DEC239E00D4831C /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
@@ -57,6 +55,8 @@
 		6A37BDD11DE84F0200CDB960 /* XMPPTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMPPTool.m; sourceTree = "<group>"; };
 		6A8CC9381DF2EE37001A8EF4 /* PersonTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonTableViewController.h; sourceTree = "<group>"; };
 		6A8CC9391DF2EE37001A8EF4 /* PersonTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonTableViewController.m; sourceTree = "<group>"; };
+		6A8CC9541DF93F87001A8EF4 /* FriendListModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendListModel.m; sourceTree = "<group>"; };
+		6A8CC9561DF93F94001A8EF4 /* FriendListModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FriendListModel.h; sourceTree = "<group>"; };
 		75C08D1D1DF270950059E2CE /* UserTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserTool.h; sourceTree = "<group>"; };
 		75C08D1E1DF270950059E2CE /* UserTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserTool.m; sourceTree = "<group>"; };
 		75C08D211DF2781B0059E2CE /* MainNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainNavigationController.h; sourceTree = "<group>"; };
@@ -96,6 +96,7 @@
 		6A0B799E1DF0424F00E55D05 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				6A8CC9511DF93A24001A8EF4 /* Lib */,
 				75C08D491DF2809D0059E2CE /* Personal */,
 				75C08D441DF280770059E2CE /* Friend */,
 				75C08D3F1DF280170059E2CE /* Recent */,
@@ -186,10 +187,15 @@
 			children = (
 				6A37BDD01DE84EF500CDB960 /* XMPPTool.h */,
 				6A37BDD11DE84F0200CDB960 /* XMPPTool.m */,
-				6A0B79991DF01CD100E55D05 /* XMPPData.m */,
-				6A0B799B1DF01CEE00E55D05 /* XMPPData.h */,
 			);
 			name = ToolClass;
+			sourceTree = "<group>";
+		};
+		6A8CC9511DF93A24001A8EF4 /* Lib */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Lib;
 			sourceTree = "<group>";
 		};
 		75C08D191DF26FA10059E2CE /* StoryBorad */ = {
@@ -404,6 +410,8 @@
 		75C08D451DF2807F0059E2CE /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				6A8CC9541DF93F87001A8EF4 /* FriendListModel.m */,
+				6A8CC9561DF93F94001A8EF4 /* FriendListModel.h */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -623,10 +631,10 @@
 				6A37BDB31DE804C400CDB960 /* AppDelegate.m in Sources */,
 				6A3408E01DED4C0600D4831C /* RecentChatTableViewController.m in Sources */,
 				6A37BDD21DE84F0200CDB960 /* XMPPTool.m in Sources */,
+				6A8CC9551DF93F87001A8EF4 /* FriendListModel.m in Sources */,
 				75C08D511DF28C3F0059E2CE /* UIAlertController+Convenience.m in Sources */,
 				75C08D261DF2781B0059E2CE /* MainTabBarViewController.m in Sources */,
 				75C08D251DF2781B0059E2CE /* MainNavigationController.m in Sources */,
-				6A0B799A1DF01CD100E55D05 /* XMPPData.m in Sources */,
 				6A3408E31DED4C1800D4831C /* FriendListTableViewController.m in Sources */,
 				75C08D1F1DF270950059E2CE /* UserTool.m in Sources */,
 				6A37BDB01DE804C400CDB960 /* main.m in Sources */,

@@ -64,6 +64,9 @@
                 NSLog(@"result register fail");
                 [self registerFailure];
                 break;
+            case XMPPResultTypeNetWorkError:
+                NSLog(@"网络超时");
+                [self networkError];
             default:
                 break;
         }
@@ -91,6 +94,10 @@
     [UIAlertController showSimpleAlertControllerWithTitle:@"注册失败" message:@"用户已经存在" parentViewController:self];
 }
 
+//网路超时
+-(void)networkError{
+    [UIAlertController showSimpleAlertControllerWithTitle:@"登录失败" message:@"网络不稳定" parentViewController:self];
+}
 
 
 

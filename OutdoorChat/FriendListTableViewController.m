@@ -20,12 +20,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.view.backgroundColor = [UIColor colorWithRed:234 green:239 blue:245 alpha:1];
+    //self.view.backgroundColor = [UIColor colorWithRed:234 green:239 blue:245 alpha:1];
     
     self.tableView.tableFooterView = [UIView new];
     
     //注册通知中心
       [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(rosterChange) name:XMPP_ROSTER_CHANGE object:nil];
+      [self rosterChange];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -52,7 +53,8 @@
 {
     //从存储器中取出我得好友数组，更新数据源
     self.contacts = [NSMutableArray arrayWithArray:[[XMPPTool sharedXMPPTool].xmppRosterMemoryStorage unsortedUsers]];
-    [self.tableView reloadData];
+    //[self.tableView reloadData];
+    [self reloadInputViews];
     NSLog(@"收到通知");
 }
 

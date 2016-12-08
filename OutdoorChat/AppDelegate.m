@@ -7,18 +7,14 @@
 //
 
 #import "AppDelegate.h"
-#import "XMPPReconnect.h"
-#import "XMPPMessageArchiving.h"
 #import "UserTool.h"
 #import "MainTabBarViewController.h"
+#import "Config.h"
+#import "XMPPTool.h"
 
 @interface AppDelegate ()
-@property XMPPReconnect *xmppReconnect;                           //重新连接
-@property XMPPMessageArchiving * xmppMessageArchiving;            //消息保存
-@property XMPPMessageArchivingCoreDataStorage * messageStorage;   //把请求的数据添加到CoreDate中
 
-@property XMPPRoster *xmppRoster;                                 //好友列表保存
-@property XMPPRosterCoreDataStorage *xmppRosterStorage;
+
 
 @end
 
@@ -31,22 +27,25 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    [self xmppInit];
     self.window = [[UIWindow alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
+    
+    //判断用户的登录状态
     BOOL isLogin = [UserTool loginStatus];
+
+    //WCLog(@"登录状态: %bool",isLogin);
+    if (isLogin) {
+        WCLog(@"true");
+        
+        [self setupMainViewController];
+    }else{
+        WCLog(@"false");
+        UIViewController *vc = [UIStoryboard storyboardWithName:@"Login" bundle:[NSBundle mainBundle]].instantiateInitialViewController;
+        self.window.rootViewController = vc ;
+    }
     
-//    if (isLogin) {
-//        
-//        [self setupMainViewController];
-//    }else{
-//        
-//        UIViewController *vc = [UIStoryboard storyboardWithName:@"Login" bundle:[NSBundle mainBundle]].instantiateInitialViewController;
-//        self.window.rootViewController = vc ;
-//    }
     
-    
-    UIViewController *vc = [UIStoryboard storyboardWithName:@"Login" bundle:[NSBundle mainBundle]].instantiateInitialViewController;
-    self.window.rootViewController = vc ;
+//    UIViewController *vc = [UIStoryboard storyboardWithName:@"Login" bundle:[NSBundle mainBundle]].instantiateInitialViewController;
+//    self.window.rootViewController = vc ;
     
     [self.window makeKeyAndVisible];
 
@@ -82,34 +81,7 @@
 
 }
 
-//对XMPP相关组件进行初始化
--(void)xmppInit {
-    self.xmppStream = [[XMPPStream alloc]init];         //创建xmppstream
-    
-    self.xmppReconnect= [[XMPPReconnect alloc] init];        //创建重写连接组件
-    [self.xmppReconnect activate:self.xmppStream];           //使组件生效
-    
-    
-    //创建消息保存策略（规则，规定）
-    self.messageStorage = [XMPPMessageArchivingCoreDataStorage sharedInstance];
-    //用消息保存策略创建消息保存组件
-    self.xmppMessageArchiving = [[XMPPMessageArchiving alloc]initWithMessageArchivingStorage:self.messageStorage];
-    //使组件生效
-    [self.xmppMessageArchiving activate:self.xmppStream];
-    //提取消息保存组件的coreData上下文
-    self.xmppManagedObjectContext = self.messageStorage.mainThreadManagedObjectContext;
-    
-    
-    
-    self.xmppRosterStorage = [[XMPPRosterCoreDataStorage alloc] init];
-    self.xmppRoster = [[XMPPRoster alloc] initWithRosterStorage:self.xmppRosterStorage];
-    //自动获取用户列表
-    self.xmppRoster.autoFetchRoster = YES;
-    self.xmppRoster.autoAcceptKnownPresenceSubscriptionRequests = YES;
-    
-    [self.xmppRoster activate:self.xmppStream];
-    self.xmppRosterManagedObjectContext = self.xmppRosterStorage.mainThreadManagedObjectContext;
-}
+
 
 
 - (void)saveContext
@@ -211,7 +183,10 @@
 #pragma mark - Private
 
 - (void)setupMainViewController{
-    
+    XMPPTool * xmppTool=[XMPPTool sharedXMPPTool];
+    [xmppTool userLogin:^(XMPPResultType type) {
+        WCLog(@"根据保存的登录状态重新登录");
+    }];
     self.window.rootViewController = [[MainTabBarViewController alloc]init];
 }
 

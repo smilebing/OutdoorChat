@@ -46,12 +46,24 @@ static NSString * const kUserLoginStatusKey = @"kUserLoginStatusKey";
     return [self boolValueForKey:kUserLoginStatusKey];
 }
 
++(void)removePwd{
+    [self saveBoolValue:NO forKey:kUserLoginStatusKey];
+
+    [self saveObjectValue:@"" forKey:kUserPasswordKey];
+}
+
 + (void)removeAll{
     
     [self saveBoolValue:NO forKey:kUserLoginStatusKey];
     [self saveObjectValue:@"" forKey:kUserNameKey];
     [self saveObjectValue:@"" forKey:kUserPasswordKey];
 }
+
+//+(void)saveUserInfoToSanbox{
+//    NSUserDefaults * defaults=[NSUserDefaults standardUserDefaults];
+//    [defaults setObject: forKey:<#(nonnull NSString *)#>]
+//}
+
 
 #pragma mark - Private
 

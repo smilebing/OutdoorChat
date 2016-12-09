@@ -10,7 +10,7 @@
 #import <XMPPFramework/XMPPFramework.h>
 #import "XMPPTool.h"
 #import "UIAlertController+Convenience.h"
-
+#import "UserTool.h"
 @interface RegisterViewController ()
 
 @property (weak, nonatomic) IBOutlet UITextField *userNameTextField;
@@ -49,9 +49,10 @@
 - (IBAction)registerButtonDidClicked:(id)sender {
     
     XMPPTool * tool =[XMPPTool sharedXMPPTool];
-    tool.userName = self.userNameTextField.text;
-    tool.userPwd = self.passwordTextField.text;
     tool.operatingType = UserOperatingTypeRegister;
+    //数据存到沙盒
+    [UserTool saveUserName:self.userNameTextField.text];
+    [UserTool savePassword:self.passwordTextField.text];
     //查看注册的结果
     [tool userRegister:^(XMPPResultType type) {
         switch (type) {
@@ -99,6 +100,9 @@
     [UIAlertController showSimpleAlertControllerWithTitle:@"登录失败" message:@"网络不稳定" parentViewController:self];
 }
 
-
+-(void)dealloc
+{
+    NSLog(@"register View dealloc");
+}
 
 @end

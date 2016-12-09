@@ -19,19 +19,19 @@
     [super viewDidLoad];
     
     MainNavigationController *recent = [UIStoryboard storyboardWithName:@"Recent" bundle:[NSBundle mainBundle]].instantiateInitialViewController;
-    [self addOneSubViewController:recent title:@"最近" imageName:nil selectedImageName:nil];
+    [self addOneSubViewController:recent title:@"最近" imageName:@"tabbar_mainframe" selectedImageName:nil];
+    
+    
     MainNavigationController *friend = [UIStoryboard storyboardWithName:@"Friend" bundle:[NSBundle mainBundle]].instantiateInitialViewController;
     [self addOneSubViewController:friend title:@"联系人" imageName:@"tabbar_friend" selectedImageName:nil];
     
+    
     MainNavigationController *map = [UIStoryboard storyboardWithName:@"Map" bundle:[NSBundle mainBundle]].instantiateInitialViewController;
-    [self addOneSubViewController:map title:@"地图" imageName:nil selectedImageName:nil];
+    [self addOneSubViewController:map title:@"地图" imageName:@"tabbar_discover" selectedImageName:nil];
     
-    
-    
-  
     
     MainNavigationController *personal = [UIStoryboard storyboardWithName:@"Personal" bundle:[NSBundle mainBundle]].instantiateInitialViewController;
-    [self addOneSubViewController:personal title:@"我" imageName:nil selectedImageName:nil];
+    [self addOneSubViewController:personal title:@"我" imageName:@"tabbar_me" selectedImageName:nil];
     
     
 }

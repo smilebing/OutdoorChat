@@ -10,9 +10,18 @@
 #import "XMPPTool.h"
 #import "UserTool.h"
 #import "MainNavigationController.h"
-
+#import <XMPPFramework/XMPPvCardTemp.h>
 
 @interface PersonTableViewController ()
+//头像
+@property (weak, nonatomic) IBOutlet UIImageView *headView;
+//昵称
+@property (weak, nonatomic) IBOutlet UILabel *nickNameLabel;
+//手机号
+@property (weak, nonatomic) IBOutlet UILabel *chatNumLabel;
+
+
+
 
 @end
 
@@ -20,12 +29,29 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
+    //显示当前用户的个人信息
     
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    //使用coreData获取数据
+    //1.上下文关联到数据库
+    
+    //2.FetchRequest
+    
+    XMPPTool * xmppTool=[XMPPTool sharedXMPPTool];
+    XMPPvCardTemp *myVCard= xmppTool.vCard.myvCardTemp;
+    
+    //设置头像
+    if(myVCard.photo)
+    {
+        self.headView.image=[UIImage imageWithData:myVCard.photo];
+    }
+    
+    //设置昵称
+    self.nickNameLabel.text=myVCard.nickname;
+    //设置账号
+    NSString * user=[UserTool userName];
+    self.chatNumLabel.text=[NSString stringWithFormat:@"微信号:%@",user];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -38,17 +64,7 @@
 }
 
 
-#pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-#warning Incomplete implementation, return the number of sections
-    return 0;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-#warning Incomplete implementation, return the number of rows
-    return 0;
-}
 
 //注销
 - (IBAction)sendOfflineToHost:(id)sender {

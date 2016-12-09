@@ -19,7 +19,11 @@
 #import <XMPPFramework/XMPPIncomingFileTransfer.h>
 #import <XMPPFramework/XMPPAutoPing.h>
 #import <XMPPFramework/XMPPReconnect.h>
-
+//电子名片头
+#import <XMPPFramework/XMPPvCardTempModule.h>
+#import <XMPPFramework/XMPPvCardCoreDataStorage.h>
+//头像
+#import <XMPPFramework/XMPPvCardAvatarModule.h>
 
 typedef  enum {
     XMPPResultTypeLoginSuccess,//登录成功
@@ -39,18 +43,11 @@ typedef NS_ENUM(NSInteger,UserOperatingType){
     UserOperatingTypeLogout
 };
 
-UIKIT_EXTERN NSString *const UserLoginSuccessNotification; //登录成功的通知
-UIKIT_EXTERN NSString *const UserLoginFailureNotification; //登录失败
-UIKIT_EXTERN NSString *const UserRegisterSuccessNotification; //注册的通知
-UIKIT_EXTERN NSString *const UserRegisterFailureNotificatiion; //注册失败
-UIKIT_EXTERN NSString *const UserLogoutNotification; //注销的通知
-UIKIT_EXTERN NSString *const UserConnectTimeout; //连接超时
+
 
 @interface XMPPTool : NSObject <XMPPStreamDelegate,XMPPRosterDelegate,XMPPRosterMemoryStorageDelegate,XMPPIncomingFileTransferDelegate>
-@property (nonatomic,retain)NSString *  userName;//用户名
-@property (nonatomic,retain)NSString *  userPwd;//密码
-@property (nonatomic,assign)UserOperatingType operatingType;//判断是登录还是注册
 
+@property (nonatomic,assign)UserOperatingType operatingType;//判断是登录还是注册
 
 @property(nonatomic,retain)XMPPStream *xmppStream;//通道
 @property (nonatomic, strong) XMPPAutoPing *xmppAutoPing;
@@ -65,7 +62,9 @@ UIKIT_EXTERN NSString *const UserConnectTimeout; //连接超时
 @property (nonatomic, strong) XMPPIncomingFileTransfer *xmppIncomingFileTransfer;
 @property (nonatomic, strong) XMPPPresence *receivePresence;
 
-
+@property XMPPvCardTempModule *vCard;//电子名片
+@property XMPPvCardCoreDataStorage *vCardStorage;//电子名片的数据存储
+@property XMPPvCardAvatarModule * avatar ;//头像模块
 //单例
 +(XMPPTool*)sharedXMPPTool;
 

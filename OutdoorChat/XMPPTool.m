@@ -10,7 +10,6 @@
 #import "UserTool.h"
 
 
-
 NSString *const UserLoginSuccessNotification = @"UserLoginSuccessNotification";
 NSString *const UserLoginFailureNotification = @"UserLoginFailureNotification";
 NSString *const UserRegisterSuccessNotification = @"UserRegisterSuccessNotification";
@@ -48,7 +47,15 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
         //为什么是addDelegate? 因为xmppFramework 大量使用了多播代理multicast-delegate ,代理一般是1对1的，但是这个多播代理是一对多得，而且可以在任意时候添加或者删除
         [self.xmppStream addDelegate:self delegateQueue:dispatch_get_main_queue()];
         
-        
+        //添加电子名片模块
+        self.vCardStorage=[XMPPvCardCoreDataStorage sharedInstance];
+        self.vCard =[[XMPPvCardTempModule alloc]initWithvCardStorage:_vCardStorage];
+        //激活
+        [self.vCard activate:self.xmppStream];
+        //头像模块
+        self.avatar=[[XMPPvCardAvatarModule alloc]initWithvCardTempModule:_vCard];
+        [self.avatar activate:self.xmppStream];
+
         
         
         // 3.好友模块 支持我们管理、同步、申请、删除好友
@@ -73,7 +80,9 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
         [_xmppIncomingFileTransfer activate:self.xmppStream];
         [_xmppIncomingFileTransfer addDelegate:self delegateQueue:dispatch_get_main_queue()];
         [_xmppIncomingFileTransfer setAutoAcceptFileTransfers:YES];
-    }
+        
+        
+           }
     return _xmppStream;
 }
 
@@ -112,7 +121,7 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
     [self xmppStream];
 
     //构建用户Jid
-    XMPPJID *jid = [XMPPJID jidWithUser:self.userName domain:XMPP_DOMAIN resource:XMPP_RESOURCE];
+    XMPPJID *jid = [XMPPJID jidWithUser:[UserTool userName] domain:XMPP_DOMAIN resource:XMPP_RESOURCE];
     self.xmppStream.myJID=jid;
     //判断连接状态
     if(self.xmppStream.isConnected)

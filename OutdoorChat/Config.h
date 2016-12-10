@@ -13,7 +13,7 @@
 
 #define XMPP_HOST @"127.0.0.1"
 #define XMPP_PORT      5222
-#define XMPP_DOMAIN    @"127.0.0.1"
+#define XMPP_DOMAIN    @"zhuhedemacbook-pro.local"
 #define XMPP_SUBDOMAIN @"group"
 #define XMPP_RESOURCE  @"iOS"
 #define XMPP_CONNECT_TIMEOUT 5.0

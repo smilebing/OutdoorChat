@@ -132,12 +132,6 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
     [self.xmppStream connectWithTimeout:4.0 error:nil];
 }
 
-//添加好友
-- (void)addFriend:(XMPPJID *)aJID
-{
-    //这里的nickname是我对它的备注，并非他得个人资料中得nickname
-    [self.xmppRoster addUser:aJID withNickname:@"好友"];
-}
 
 //发送在线信息给服务器
 - (void)goOnline
@@ -210,7 +204,7 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
     {
         _resultBlock(XMPPResultTypeNetWorkError);
     }
-    WCLog(@"与服务器断开连接%@",error);
+    WCLog(@"与服务器断开连接 \n%@",error);
 }
 
 //登录失败
@@ -258,109 +252,9 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
 
 
 
-#pragma mark ===== 好友模块 委托=======
-/** 收到出席订阅请求（代表对方想添加自己为好友) */
-- (void)xmppRoster:(XMPPRoster *)sender didReceivePresenceSubscriptionRequest:(XMPPPresence *)presence
-{
-    //添加好友一定会订阅对方，但是接受订阅不一定要添加对方为好友
-    self.receivePresence = presence;
-    
-    NSString *message = [NSString stringWithFormat:@"【%@】想加你为好友",presence.from.bare];
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:message delegate:self cancelButtonTitle:@"拒绝" otherButtonTitles:@"同意", nil];
-    [alertView show];
-}
-
-- (void)xmppStream:(XMPPStream *)sender didReceivePresence:(XMPPPresence *)presence
-{
-    //收到对方取消定阅我得消息
-    if ([presence.type isEqualToString:@"unsubscribe"]) {
-        //从我的本地通讯录中将他移除
-        [self.xmppRoster removeUser:presence.from];
-    }
-}
 
 
 
-/**
- * 开始同步服务器发送过来的自己的好友列表
- **/
-- (void)xmppRosterDidBeginPopulating:(XMPPRoster *)sender
-{
-    WCLog(@"xmppRosterDidBeginPopulating");
-}
-
-/**
- * 同步结束
- **/
-//收到好友列表IQ会进入的方法，并且已经存入我的存储器
-- (void)xmppRosterDidEndPopulating:(XMPPRoster *)sender
-{
-    WCLog(@"xmppRosterDidEndPopulating");
-    [[NSNotificationCenter defaultCenter] postNotificationName:XMPP_ROSTER_CHANGE object:nil];
-}
-
-
-
-//收到每一个好友
-- (void)xmppRoster:(XMPPRoster *)sender didReceiveRosterItem:(NSXMLElement *)item
-{
-    //WCLog(@"didReceiveRosterItem \n%@",item);
-}
-
-// 如果不是初始化同步来的roster,那么会自动存入我的好友存储器
-- (void)xmppRosterDidChange:(XMPPRosterMemoryStorage *)sender
-{
-    WCLog(@"xmppRosterDidChange");
-    [[NSNotificationCenter defaultCenter] postNotificationName:XMPP_ROSTER_CHANGE object:nil];
-}
-
-#pragma mark ===== 文件接收=======
-/** 是否同意对方发文件给我 */
-- (void)xmppIncomingFileTransfer:(XMPPIncomingFileTransfer *)sender didReceiveSIOffer:(XMPPIQ *)offer
-{
-    WCLog(@"%s",__FUNCTION__);
-    //弹出一个是否接收的询问框
-    //    [self.xmppIncomingFileTransfer acceptSIOffer:offer];
-}
-
-//- (void)xmppIncomingFileTransfer:(XMPPIncomingFileTransfer *)sender didSucceedWithData:(NSData *)data named:(NSString *)name
-//{
-//    XMPPJID * jid=[sender ]
-//    //XMPPJID *jid = [sender.senderJID copy];
-//    WCLog(@"%s",__FUNCTION__);
-//    //在这个方法里面，我们通过带外来传输的文件
-//    //因此我们的消息同步器，不会帮我们自动生成Message,因此我们需要手动存储message
-//    //根据文件后缀名，判断文件我们是否能够处理，如果不能处理则直接显示。
-//    //图片 音频 （.wav,.mp3,.mp4)
-//    NSString *extension = [name pathExtension];
-//    if (![@"wav" isEqualToString:extension]) {
-//        return;
-//    }
-//    //创建一个XMPPMessage对象,message必须要有from
-//    XMPPMessage *message = [XMPPMessage messageWithType:@"chat" to:jid];
-//    //将这个文件的发送者添加到Message的from
-//    [message addAttributeWithName:@"from" stringValue:sender.senderJID.bare];
-//    [message addSubject:@"audio"];
-//    
-//    //保存data
-//    NSString *path =  [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
-//    path = [path stringByAppendingPathComponent:[XMPPStream generateUUID]];
-//    path = [path stringByAppendingPathExtension:@"wav"];
-//    [data writeToFile:path atomically:YES];
-//    
-//    [message addBody:path.lastPathComponent];
-//    
-//    [self.xmppMessageArchivingCoreDataStorage archiveMessage:message outgoing:NO xmppStream:self.xmppStream];
-//}
-
-#pragma mark - Message
-- (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message
-{
-    WCLog(@"收到信息");
-    WCLog(@"%s--%@",__FUNCTION__, message);
-    //XEP--0136 已经用coreData实现了数据的接收和保存
-    
-}
 
 //获取好友列表的回调
 - (BOOL)xmppStream:(XMPPStream *)sender didReceiveIQ:(XMPPIQ *)iq
@@ -396,18 +290,6 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
     return YES;
 }
 
-
-
-#pragma mark - UIAlertViewDelegate
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex == 0) {
-        WCLog(@"0000");
-        [self.xmppRoster rejectPresenceSubscriptionRequestFrom:_receivePresence.from];
-    } else {
-        [self.xmppRoster acceptPresenceSubscriptionRequestFrom:_receivePresence.from andAddToRoster:YES];
-    }
-}
 
 
 

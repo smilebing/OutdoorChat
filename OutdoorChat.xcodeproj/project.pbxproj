@@ -19,6 +19,8 @@
 		6A37BDD21DE84F0200CDB960 /* XMPPTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A37BDD11DE84F0200CDB960 /* XMPPTool.m */; };
 		6A8CC93A1DF2EE37001A8EF4 /* PersonTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A8CC9391DF2EE37001A8EF4 /* PersonTableViewController.m */; };
 		6A8CC9551DF93F87001A8EF4 /* FriendListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A8CC9541DF93F87001A8EF4 /* FriendListModel.m */; };
+		6A8CC9591DFACC30001A8EF4 /* ProfileTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A8CC9581DFACC30001A8EF4 /* ProfileTableViewController.m */; };
+		6A8CC95C1DFB037F001A8EF4 /* EditProfileTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A8CC95B1DFB037F001A8EF4 /* EditProfileTableViewController.m */; };
 		75C08D1F1DF270950059E2CE /* UserTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 75C08D1E1DF270950059E2CE /* UserTool.m */; };
 		75C08D251DF2781B0059E2CE /* MainNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75C08D221DF2781B0059E2CE /* MainNavigationController.m */; };
 		75C08D261DF2781B0059E2CE /* MainTabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75C08D241DF2781B0059E2CE /* MainTabBarViewController.m */; };
@@ -57,6 +59,10 @@
 		6A8CC9391DF2EE37001A8EF4 /* PersonTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonTableViewController.m; sourceTree = "<group>"; };
 		6A8CC9541DF93F87001A8EF4 /* FriendListModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendListModel.m; sourceTree = "<group>"; };
 		6A8CC9561DF93F94001A8EF4 /* FriendListModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FriendListModel.h; sourceTree = "<group>"; };
+		6A8CC9571DFACC30001A8EF4 /* ProfileTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileTableViewController.h; sourceTree = "<group>"; };
+		6A8CC9581DFACC30001A8EF4 /* ProfileTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileTableViewController.m; sourceTree = "<group>"; };
+		6A8CC95A1DFB037F001A8EF4 /* EditProfileTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditProfileTableViewController.h; sourceTree = "<group>"; };
+		6A8CC95B1DFB037F001A8EF4 /* EditProfileTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditProfileTableViewController.m; sourceTree = "<group>"; };
 		75C08D1D1DF270950059E2CE /* UserTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserTool.h; sourceTree = "<group>"; };
 		75C08D1E1DF270950059E2CE /* UserTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserTool.m; sourceTree = "<group>"; };
 		75C08D211DF2781B0059E2CE /* MainNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainNavigationController.h; sourceTree = "<group>"; };
@@ -469,6 +475,10 @@
 			children = (
 				6A8CC9381DF2EE37001A8EF4 /* PersonTableViewController.h */,
 				6A8CC9391DF2EE37001A8EF4 /* PersonTableViewController.m */,
+				6A8CC9571DFACC30001A8EF4 /* ProfileTableViewController.h */,
+				6A8CC9581DFACC30001A8EF4 /* ProfileTableViewController.m */,
+				6A8CC95A1DFB037F001A8EF4 /* EditProfileTableViewController.h */,
+				6A8CC95B1DFB037F001A8EF4 /* EditProfileTableViewController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -629,11 +639,13 @@
 				6A8CC93A1DF2EE37001A8EF4 /* PersonTableViewController.m in Sources */,
 				6A3408D31DEC23AF00D4831C /* RegisterViewController.m in Sources */,
 				6A37BDB31DE804C400CDB960 /* AppDelegate.m in Sources */,
+				6A8CC9591DFACC30001A8EF4 /* ProfileTableViewController.m in Sources */,
 				6A3408E01DED4C0600D4831C /* RecentChatTableViewController.m in Sources */,
 				6A37BDD21DE84F0200CDB960 /* XMPPTool.m in Sources */,
 				6A8CC9551DF93F87001A8EF4 /* FriendListModel.m in Sources */,
 				75C08D511DF28C3F0059E2CE /* UIAlertController+Convenience.m in Sources */,
 				75C08D261DF2781B0059E2CE /* MainTabBarViewController.m in Sources */,
+				6A8CC95C1DFB037F001A8EF4 /* EditProfileTableViewController.m in Sources */,
 				75C08D251DF2781B0059E2CE /* MainNavigationController.m in Sources */,
 				6A3408E31DED4C1800D4831C /* FriendListTableViewController.m in Sources */,
 				75C08D1F1DF270950059E2CE /* UserTool.m in Sources */,

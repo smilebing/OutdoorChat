@@ -145,12 +145,12 @@
     
 }
 
-
 #pragma mark 图片选择器的代理
+
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
-    WCLog(@"%@",info);
+    WCLog(@"图片选择器回调%@",info);
     // 获取图片 设置图片
-    UIImage *image = info[UIImagePickerControllerEditedImage];
+    UIImage *image =(UIImage*) info[UIImagePickerControllerEditedImage];
     
     self.headView.image = image;
     
@@ -159,13 +159,14 @@
     
     // 更新到服务器
     [self editProfileTableViewControllerDidSave];
-    
 }
+
+
 
 #pragma mark 编辑个人信息的控制器代理
 // 保存
 -(void)editProfileTableViewControllerDidSave{
-    NSLog(@"editProfileTableViewControllerDidSave");
+    //NSLog(@"editProfileTableViewControllerDidSave");
     //获取当前的电子名片信息
     XMPPvCardTemp *myvCard = [XMPPTool sharedXMPPTool].vCard.myvCardTemp ;
     

@@ -12,6 +12,7 @@
 #import "Config.h"
 #import "XMPPTool.h"
 
+
 @interface AppDelegate ()
 
 
@@ -31,6 +32,10 @@
 
     //WCLog(@"登录状态: %bool",isLogin);
     if (isLogin) {
+            XMPPTool * xmppTool=[XMPPTool sharedXMPPTool];
+            [xmppTool userLogin:^(XMPPResultType type) {
+                WCLog(@"根据保存的登录状态重新登录");
+            }];
         [self setupMainViewController];
     }else{
         UIViewController *vc = [UIStoryboard storyboardWithName:@"Login" bundle:[NSBundle mainBundle]].instantiateInitialViewController;
@@ -40,8 +45,9 @@
     
     [self.window makeKeyAndVisible];
 
-    NSString * path=[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
-    NSLog(@"path %@",path);
+    //打印沙盒路径
+    //NSString * path=[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+    //NSLog(@"path %@",path);
     
     return YES;
 }
@@ -92,10 +98,10 @@
 #pragma mark - Private
 
 - (void)setupMainViewController{
-    XMPPTool * xmppTool=[XMPPTool sharedXMPPTool];
-    [xmppTool userLogin:^(XMPPResultType type) {
-        WCLog(@"根据保存的登录状态重新登录");
-    }];
+//    XMPPTool * xmppTool=[XMPPTool sharedXMPPTool];
+//    [xmppTool userLogin:^(XMPPResultType type) {
+//        WCLog(@"根据保存的登录状态重新登录");
+//    }];
     self.window.rootViewController = [[MainTabBarViewController alloc]init];
 }
 

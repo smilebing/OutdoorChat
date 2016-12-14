@@ -10,12 +10,6 @@
 #import "UserTool.h"
 
 
-NSString *const UserLoginSuccessNotification = @"UserLoginSuccessNotification";
-NSString *const UserLoginFailureNotification = @"UserLoginFailureNotification";
-NSString *const UserRegisterSuccessNotification = @"UserRegisterSuccessNotification";
-NSString *const UserRegisterFailureNotificatiion = @"UserRegisterFailureNotificatiion";
-NSString *const UserLogoutNotification = @"UserLogoutNotification";
-NSString *const UserConnectTimeout = @"UserConnectTimeout";
 
 @interface XMPPTool ()     
     @property XMPPResultBlock resultBlock;
@@ -44,8 +38,14 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
         //socket 连接的时候 要知道host port 然后connect
         [self.xmppStream setHostName:XMPP_HOST];
         [self.xmppStream setHostPort:XMPP_PORT];
+        
         //为什么是addDelegate? 因为xmppFramework 大量使用了多播代理multicast-delegate ,代理一般是1对1的，但是这个多播代理是一对多得，而且可以在任意时候添加或者删除
         [self.xmppStream addDelegate:self delegateQueue:dispatch_get_main_queue()];
+        
+        
+        //自动连接模块
+        _xmppReconnect =[[XMPPReconnect alloc]init];
+        [_xmppReconnect activate:_xmppStream];
         
         //添加电子名片模块
         self.vCardStorage=[XMPPvCardCoreDataStorage sharedInstance];
@@ -58,10 +58,12 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
 
         
         
-        // 3.好友模块 支持我们管理、同步、申请、删除好友
+        // 好友模块 （花名册）
         _xmppRosterMemoryStorage = [[XMPPRosterMemoryStorage alloc] init];
         _xmppRoster = [[XMPPRoster alloc] initWithRosterStorage:_xmppRosterMemoryStorage];
         [_xmppRoster activate:self.xmppStream];
+        
+        
         
         //同时给_xmppRosterMemoryStorage 和 _xmppRoster都添加了代理
         [_xmppRoster addDelegate:self delegateQueue:dispatch_get_main_queue()];
@@ -97,7 +99,7 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
     // 2.把我自己的jid与这个TCP连接绑定起来
     // 3.认证（登录：验证jid与密码是否正确，加密方式 不可能以明文发送）--（出席：怎样告诉服务器我上线，以及我得上线状态
     //这句话会在xmppStream以后发送XML的时候加上 <message from="JID">
-    WCLog(@"userLogin");
+    //WCLog(@"userLogin");
     [self xmppStream];
     //构建用户Jid
     XMPPJID *jid = [XMPPJID jidWithUser:[UserTool userName] domain:XMPP_DOMAIN resource:XMPP_RESOURCE];
@@ -123,6 +125,7 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
     //构建用户Jid
     XMPPJID *jid = [XMPPJID jidWithUser:[UserTool userName] domain:XMPP_DOMAIN resource:XMPP_RESOURCE];
     self.xmppStream.myJID=jid;
+
     //判断连接状态
     if(self.xmppStream.isConnected)
     {
@@ -158,9 +161,10 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
     // 2. 与服务器断开连接
     [self.xmppStream disconnect];
     [self.xmppStream removeDelegate:self];
+    //[_xmppRoster removeDelegate:self];
+
     self.xmppReconnect.autoReconnect = NO;
     [self.xmppReconnect deactivate];
-    [self.xmppAutoPing deactivate];
     [self.xmppRoster deactivate];
     [self.xmppMessageArchiving deactivate];
     [self.xmppIncomingFileTransfer deactivate];
@@ -172,7 +176,7 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
 //socket 连接建立成功
 - (void)xmppStream:(XMPPStream *)sender socketDidConnect:(GCDAsyncSocket *)socket
 {
-    WCLog(@"%s",__func__);
+    //WCLog(@"%s",__func__);
 }
 
 //连接服务器成功
@@ -204,7 +208,7 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
     {
         _resultBlock(XMPPResultTypeNetWorkError);
     }
-    WCLog(@"与服务器断开连接 \n%@",error);
+    WCLog(@"===========与服务器断开连接================ \n错误内容:%@",error);
 }
 
 //登录失败
@@ -259,7 +263,7 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
 //获取好友列表的回调
 - (BOOL)xmppStream:(XMPPStream *)sender didReceiveIQ:(XMPPIQ *)iq
 {
-    WCLog(@"获取好友列表的回调");
+    //WCLog(@"获取好友列表的回调");
     //WCLog(@"好友列表iq:%@",iq);
     // 以下两个判断其实只需要有一个就够了
     NSString *elementID = iq.elementID;
@@ -282,7 +286,6 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
             }
         }
     }
-    
     //发送通知，FriendListView接受
     [[NSNotificationCenter defaultCenter] postNotificationName:XMPP_GET_GROUPS_NOTIFICATION object:array];
     [[NSNotificationCenter defaultCenter] postNotificationName:XMPP_ROSTER_CHANGE object:array];
@@ -290,6 +293,40 @@ NSString *const UserConnectTimeout = @"UserConnectTimeout";
     return YES;
 }
 
+
+-(void)xmppRosterDidChange:(XMPPRosterMemoryStorage *)sender
+{
+    
+}
+
+#pragma mark 销毁
+-(void)tearDown
+{
+    //移除代理
+    [_xmppStream removeDelegate:self];
+    
+    //停止模块
+    [_xmppReconnect deactivate];
+    [_vCard deactivate];
+    [_avatar deactivate];
+    [_xmppRoster deactivate];
+    
+    //断开连接
+    [_xmppStream disconnect];
+    
+    //清空资源
+    _xmppReconnect=nil;
+    _vCard=nil;
+    _vCardStorage=nil;
+    _avatar=nil;
+    _xmppRoster=nil;
+    _xmppStream=nil;
+}
+
+-(void)dealloc
+{
+    [self tearDown];
+}
 
 
 

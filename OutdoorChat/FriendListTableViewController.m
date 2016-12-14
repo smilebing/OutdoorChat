@@ -53,16 +53,15 @@
 {
     //从存储器中取出我得好友数组，更新数据源
     self.contacts = [NSMutableArray arrayWithArray:[[XMPPTool sharedXMPPTool].xmppRosterMemoryStorage unsortedUsers]];
-    //[self.tableView reloadData];
+    [self.tableView reloadData];
     [self reloadInputViews];
-    NSLog(@"收到通知");
+    //NSLog(@"收到通知");
 }
 
 
 
 -(void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    NSLog(@"移除 FriendList 的observer");
 }
 
 

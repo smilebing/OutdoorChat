@@ -137,10 +137,11 @@ NSString *const kXMPPmyPassword = @"kXMPPmyPassword";
 - (void)loginSuccess{
     //保存用户登录成功数据
     [UserTool saveLoginStatus:YES];
-    
     //隐藏模态窗口
     [self dismissViewControllerAnimated:YES completion:nil];
+
     AppDelegate *delegate = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+
     [delegate setupMainViewController];
 //    [UserTool savePassword:self.passwordTextFiled.text];
 //    [UserTool saveUserName:self.userNameTextFiled.text];
@@ -159,6 +160,6 @@ NSString *const kXMPPmyPassword = @"kXMPPmyPassword";
 }
 
 -(void)dealloc{
-    NSLog(@"dealloc");
+    //NSLog(@"dealloc");
 }
 @end

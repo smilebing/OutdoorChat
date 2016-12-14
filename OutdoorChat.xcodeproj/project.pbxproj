@@ -282,26 +282,9 @@
 		75C08D351DF27F440059E2CE /* Login */ = {
 			isa = PBXGroup;
 			children = (
-				75C08D391DF27F630059E2CE /* Interface */,
 				75C08D381DF27F560059E2CE /* Controller */,
-				75C08D371DF27F510059E2CE /* View */,
-				75C08D361DF27F4B0059E2CE /* Model */,
 			);
 			name = Login;
-			sourceTree = "<group>";
-		};
-		75C08D361DF27F4B0059E2CE /* Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Model;
-			sourceTree = "<group>";
-		};
-		75C08D371DF27F510059E2CE /* View */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = View;
 			sourceTree = "<group>";
 		};
 		75C08D381DF27F560059E2CE /* Controller */ = {
@@ -311,13 +294,6 @@
 				6A3408CF1DEC239E00D4831C /* LoginViewController.m */,
 			);
 			name = Controller;
-			sourceTree = "<group>";
-		};
-		75C08D391DF27F630059E2CE /* Interface */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Interface;
 			sourceTree = "<group>";
 		};
 		75C08D3A1DF27FDA0059E2CE /* Register */ = {
@@ -405,9 +381,7 @@
 		75C08D441DF280770059E2CE /* Friend */ = {
 			isa = PBXGroup;
 			children = (
-				75C08D481DF280910059E2CE /* Interface */,
 				75C08D471DF2808C0059E2CE /* Controller */,
-				75C08D461DF280860059E2CE /* View */,
 				75C08D451DF2807F0059E2CE /* Model */,
 			);
 			name = Friend;
@@ -422,13 +396,6 @@
 			name = Model;
 			sourceTree = "<group>";
 		};
-		75C08D461DF280860059E2CE /* View */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = View;
-			sourceTree = "<group>";
-		};
 		75C08D471DF2808C0059E2CE /* Controller */ = {
 			isa = PBXGroup;
 			children = (
@@ -438,36 +405,12 @@
 			name = Controller;
 			sourceTree = "<group>";
 		};
-		75C08D481DF280910059E2CE /* Interface */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Interface;
-			sourceTree = "<group>";
-		};
 		75C08D491DF2809D0059E2CE /* Personal */ = {
 			isa = PBXGroup;
 			children = (
-				75C08D4D1DF280BC0059E2CE /* Interface */,
 				75C08D4C1DF280B60059E2CE /* Controller */,
-				75C08D4B1DF280B00059E2CE /* View */,
-				75C08D4A1DF280A80059E2CE /* Model */,
 			);
 			name = Personal;
-			sourceTree = "<group>";
-		};
-		75C08D4A1DF280A80059E2CE /* Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Model;
-			sourceTree = "<group>";
-		};
-		75C08D4B1DF280B00059E2CE /* View */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = View;
 			sourceTree = "<group>";
 		};
 		75C08D4C1DF280B60059E2CE /* Controller */ = {
@@ -481,13 +424,6 @@
 				6A8CC95B1DFB037F001A8EF4 /* EditProfileTableViewController.m */,
 			);
 			name = Controller;
-			sourceTree = "<group>";
-		};
-		75C08D4D1DF280BC0059E2CE /* Interface */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Interface;
 			sourceTree = "<group>";
 		};
 		75C08D4E1DF28C2A0059E2CE /* Category */ = {

@@ -11,11 +11,14 @@
 #import <Foundation/Foundation.h>
 #import "Config.h"
 #import <XMPPFramework/XMPPFramework.h>
-#import <XMPPFramework/XMPPRoster.h>
-#import <XMPPFramework/XMPPMessageArchivingCoreDataStorage.h>
-#import <XMPPFramework/XMPPRosterCoreDataStorage.h>
 
+//好友列表
+#import <XMPPFramework/XMPPRoster.h>
+#import <XMPPFramework/XMPPRosterCoreDataStorage.h>
 #import <XMPPFramework/XMPPRosterMemoryStorage.h>
+
+#import <XMPPFramework/XMPPMessageArchivingCoreDataStorage.h>
+
 #import <XMPPFramework/XMPPIncomingFileTransfer.h>
 #import <XMPPFramework/XMPPAutoPing.h>
 #import <XMPPFramework/XMPPReconnect.h>
@@ -50,9 +53,10 @@ typedef NS_ENUM(NSInteger,UserOperatingType){
 @property (nonatomic,assign)UserOperatingType operatingType;//判断是登录还是注册
 
 @property(nonatomic,retain)XMPPStream *xmppStream;//通道
-@property (nonatomic, strong) XMPPAutoPing *xmppAutoPing;
-@property (nonatomic, strong) XMPPReconnect *xmppReconnect;
 
+@property (nonatomic, strong) XMPPReconnect *xmppReconnect; //自动连接模块
+
+//花名册
 @property (nonatomic, strong) XMPPRoster *xmppRoster;
 @property (nonatomic, strong) XMPPRosterMemoryStorage *xmppRosterMemoryStorage;
 
@@ -72,8 +76,7 @@ typedef NS_ENUM(NSInteger,UserOperatingType){
 -(void)userLogin:(XMPPResultBlock)resultBlock;
 //注册
 -(void)userRegister:(XMPPResultBlock)resultBlock;
-//添加好友
--(void)addFriend:(XMPPJID *) friendJID;
+
 //退出登录
 -(void)logout;
 

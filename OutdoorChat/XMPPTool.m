@@ -59,8 +59,8 @@
         
         
         // 好友模块 （花名册）
-        _xmppRosterMemoryStorage = [[XMPPRosterMemoryStorage alloc] init];
-        _xmppRoster = [[XMPPRoster alloc] initWithRosterStorage:_xmppRosterMemoryStorage];
+        _xmppRosterCoreDataStorage=[[XMPPRosterCoreDataStorage alloc]init];
+        _xmppRoster = [[XMPPRoster alloc] initWithRosterStorage:_xmppRosterCoreDataStorage];
         [_xmppRoster activate:self.xmppStream];
         
         
@@ -92,6 +92,7 @@
 //登录
 - (void)userLogin:(XMPPResultBlock)resultBlock
 {
+    WCLog(@"登录方法");
     //先把block存起来
     self.resultBlock=resultBlock;
     
@@ -143,10 +144,12 @@
     // status ---自定义的内容，可以是任何的。
     // show 是固定的，有几种类型 dnd、xa、away、chat，在方法XMPPPresence 的intShow中可以看到
     XMPPPresence *presence = [XMPPPresence presence];
-    [presence addChild:[DDXMLNode elementWithName:@"status" stringValue:@"我现在很忙"]];
-    [presence addChild:[DDXMLNode elementWithName:@"show" stringValue:@"xa"]];
-    
+    //自定义在线信息，默认是在线信息
+    //    [presence addChild:[DDXMLNode elementWithName:@"status" stringValue:@"我现在很忙"]];
+    //    [presence addChild:[DDXMLNode elementWithName:@"show" stringValue:@"xa"]];
     [self.xmppStream sendElement:presence];
+    
+    
 }
 
 /**
@@ -261,37 +264,37 @@
 
 
 //获取好友列表的回调
-- (BOOL)xmppStream:(XMPPStream *)sender didReceiveIQ:(XMPPIQ *)iq
-{
-    //WCLog(@"获取好友列表的回调");
-    //WCLog(@"好友列表iq:%@",iq);
-    // 以下两个判断其实只需要有一个就够了
-    NSString *elementID = iq.elementID;
-    if (![elementID isEqualToString:@"getMyRooms"]) {
-        return YES;
-    }
-    
-    NSArray *results = [iq elementsForXmlns:@"http://jabber.org/protocol/disco#items"];
-    if (results.count < 1) {
-        return YES;
-    }
-    
-    NSMutableArray *array = [NSMutableArray array];
-    for (DDXMLElement *element in iq.children) {
-        if ([element.name isEqualToString:@"query"]) {
-            for (DDXMLElement *item in element.children) {
-                if ([item.name isEqualToString:@"item"]) {
-                    [array addObject:item];          //array  就是你的群列表
-                }
-            }
-        }
-    }
-    //发送通知，FriendListView接受
-    [[NSNotificationCenter defaultCenter] postNotificationName:XMPP_GET_GROUPS_NOTIFICATION object:array];
-    [[NSNotificationCenter defaultCenter] postNotificationName:XMPP_ROSTER_CHANGE object:array];
-
-    return YES;
-}
+//- (BOOL)xmppStream:(XMPPStream *)sender didReceiveIQ:(XMPPIQ *)iq
+//{
+//    //WCLog(@"获取好友列表的回调");
+//    //WCLog(@"好友列表iq:%@",iq);
+//    // 以下两个判断其实只需要有一个就够了
+//    NSString *elementID = iq.elementID;
+//    if (![elementID isEqualToString:@"getMyRooms"]) {
+//        return YES;
+//    }
+//    
+//    NSArray *results = [iq elementsForXmlns:@"http://jabber.org/protocol/disco#items"];
+//    if (results.count < 1) {
+//        return YES;
+//    }
+//    
+//    NSMutableArray *array = [NSMutableArray array];
+//    for (DDXMLElement *element in iq.children) {
+//        if ([element.name isEqualToString:@"query"]) {
+//            for (DDXMLElement *item in element.children) {
+//                if ([item.name isEqualToString:@"item"]) {
+//                    [array addObject:item];          //array  就是你的群列表
+//                }
+//            }
+//        }
+//    }
+//    //发送通知，FriendListView接受
+//    [[NSNotificationCenter defaultCenter] postNotificationName:XMPP_GET_GROUPS_NOTIFICATION object:array];
+//    [[NSNotificationCenter defaultCenter] postNotificationName:XMPP_ROSTER_CHANGE object:array];
+//
+//    return YES;
+//}
 
 
 -(void)xmppRosterDidChange:(XMPPRosterMemoryStorage *)sender
@@ -311,6 +314,7 @@
     [_avatar deactivate];
     [_xmppRoster deactivate];
     
+    
     //断开连接
     [_xmppStream disconnect];
     
@@ -320,6 +324,7 @@
     _vCardStorage=nil;
     _avatar=nil;
     _xmppRoster=nil;
+    _xmppRosterCoreDataStorage=nil;
     _xmppStream=nil;
 }
 

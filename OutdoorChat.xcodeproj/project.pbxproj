@@ -17,6 +17,7 @@
 		6A37BDBB1DE804C400CDB960 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6A37BDBA1DE804C400CDB960 /* Assets.xcassets */; };
 		6A37BDBE1DE804C400CDB960 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A37BDBC1DE804C400CDB960 /* LaunchScreen.storyboard */; };
 		6A37BDD21DE84F0200CDB960 /* XMPPTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A37BDD11DE84F0200CDB960 /* XMPPTool.m */; };
+		6A7FCA8C1E056F7C00C09149 /* AddFriendTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A7FCA8B1E056F7C00C09149 /* AddFriendTableViewController.m */; };
 		6A8CC93A1DF2EE37001A8EF4 /* PersonTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A8CC9391DF2EE37001A8EF4 /* PersonTableViewController.m */; };
 		6A8CC9551DF93F87001A8EF4 /* FriendListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A8CC9541DF93F87001A8EF4 /* FriendListModel.m */; };
 		6A8CC9591DFACC30001A8EF4 /* ProfileTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A8CC9581DFACC30001A8EF4 /* ProfileTableViewController.m */; };
@@ -55,6 +56,8 @@
 		6A37BDBF1DE804C400CDB960 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6A37BDD01DE84EF500CDB960 /* XMPPTool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XMPPTool.h; sourceTree = "<group>"; };
 		6A37BDD11DE84F0200CDB960 /* XMPPTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMPPTool.m; sourceTree = "<group>"; };
+		6A7FCA8A1E056F7C00C09149 /* AddFriendTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddFriendTableViewController.h; sourceTree = "<group>"; };
+		6A7FCA8B1E056F7C00C09149 /* AddFriendTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddFriendTableViewController.m; sourceTree = "<group>"; };
 		6A8CC9381DF2EE37001A8EF4 /* PersonTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonTableViewController.h; sourceTree = "<group>"; };
 		6A8CC9391DF2EE37001A8EF4 /* PersonTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonTableViewController.m; sourceTree = "<group>"; };
 		6A8CC9541DF93F87001A8EF4 /* FriendListModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendListModel.m; sourceTree = "<group>"; };
@@ -401,6 +404,8 @@
 			children = (
 				6A3408E11DED4C1800D4831C /* FriendListTableViewController.h */,
 				6A3408E21DED4C1800D4831C /* FriendListTableViewController.m */,
+				6A7FCA8A1E056F7C00C09149 /* AddFriendTableViewController.h */,
+				6A7FCA8B1E056F7C00C09149 /* AddFriendTableViewController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -573,6 +578,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6A8CC93A1DF2EE37001A8EF4 /* PersonTableViewController.m in Sources */,
+				6A7FCA8C1E056F7C00C09149 /* AddFriendTableViewController.m in Sources */,
 				6A3408D31DEC23AF00D4831C /* RegisterViewController.m in Sources */,
 				6A37BDB31DE804C400CDB960 /* AppDelegate.m in Sources */,
 				6A8CC9591DFACC30001A8EF4 /* ProfileTableViewController.m in Sources */,

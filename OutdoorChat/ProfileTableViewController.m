@@ -9,6 +9,7 @@
 #import "ProfileTableViewController.h"
 #import <XMPPFramework/XMPPvCardTempModule.h>
 #import <XMPPFramework/XMPPvCardTemp.h>
+//#import <XMPPFramework/XMPPFramework-umbrella.h>
 #import "XMPPTool.h"
 #import "UserTool.h"
 #import "EditProfileTableViewController.h"
@@ -184,7 +185,6 @@
         myvCard.orgUnits = @[self.orgunitLabel.text];
     }
     
-    
     // 职位
     myvCard.title = self.titleLabel.text;
     
@@ -202,5 +202,8 @@
     
     
 }
+
+
+
 
 @end

@@ -12,6 +12,11 @@
 
 
 /**
+ jid
+ */
++(void)saveJid:(NSString *)jid;
++(NSString *)jid;
+/**
  保存用户名
 
  @param userName 用户名

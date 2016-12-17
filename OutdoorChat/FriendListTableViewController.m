@@ -9,10 +9,13 @@
 #import "FriendListTableViewController.h"
 #import "XMPPTool.h"
 #import "Config.h"
+#import "UserTool.h"
 
 
-@interface FriendListTableViewController ()
-@property (nonatomic, retain) NSMutableArray    *contacts;
+@interface FriendListTableViewController ()<NSFetchedResultsControllerDelegate>
+
+@property(nonatomic,strong)NSArray * friends;
+@property(nonatomic,strong)NSFetchedResultsController *resultController;
 @end
 
 @implementation FriendListTableViewController
@@ -20,129 +23,139 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    //self.view.backgroundColor = [UIColor colorWithRed:234 green:239 blue:245 alpha:1];
+    //从数据库里面加载好友列表显示
+    [self loadFriendsTwo];
     
-    self.tableView.tableFooterView = [UIView new];
-    
-    //注册通知中心
-      [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(rosterChange) name:XMPP_ROSTER_CHANGE object:nil];
-      [self rosterChange];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+//加载好友列表
+-(void)loadFriends
+{
+    //1.使用coreData获取数据
+    NSManagedObjectContext * context= [XMPPTool sharedXMPPTool].xmppRosterCoreDataStorage.mainThreadManagedObjectContext;
+    
+    //2.FetchRequest 查表
+    NSFetchRequest * request=[NSFetchRequest fetchRequestWithEntityName:@"XMPPUserCoreDataStorageObject"];
+    
+    //3.设置过滤和排序
+    //过滤当前登录用户的好友
+    NSString * jid=[UserTool jid] ;
+    NSLog(@"jid=%@",jid);
+    NSPredicate * pre=[NSPredicate predicateWithFormat:@"streamBareJidStr = %@",jid];
+    request.predicate=pre;
+    
+    //排序
+    NSSortDescriptor * sort=[NSSortDescriptor sortDescriptorWithKey:@"displayName" ascending:YES];
+    request.sortDescriptors=@[sort];
+    //4.请求获取数据
+    NSError * error=nil;
+    self.friends =[context executeFetchRequest:request error:&error ];
+    //NSLog(@"%@",self.friends);
+    
+}
+
+-(void)loadFriendsTwo
+{
+    //1.使用coreData获取数据
+    NSManagedObjectContext * context= [XMPPTool sharedXMPPTool].xmppRosterCoreDataStorage.mainThreadManagedObjectContext;
+    
+    //2.FetchRequest 查表
+    NSFetchRequest * request=[NSFetchRequest fetchRequestWithEntityName:@"XMPPUserCoreDataStorageObject"];
+    
+    //3.设置过滤和排序
+    //过滤当前登录用户的好友
+    NSString * jid=[UserTool jid] ;
+    NSLog(@"jid=%@",jid);
+    NSPredicate * pre=[NSPredicate predicateWithFormat:@"streamBareJidStr = %@",jid];
+    request.predicate=pre;
+    
+    //排序
+    NSSortDescriptor * sort=[NSSortDescriptor sortDescriptorWithKey:@"displayName" ascending:YES];
+    request.sortDescriptors=@[sort];
+    
+    
+    //4.请求获取数据
+    _resultController=[[NSFetchedResultsController alloc]initWithFetchRequest:request managedObjectContext:context sectionNameKeyPath:nil cacheName:nil];
+    _resultController.delegate=self;
+    NSError * error=nil;
+    
+    [_resultController performFetch:&error];
+    if(error)
+    {
+        WCLog(@"获取好友列表出错 %@",error);
+    }
 }
 
 
 #pragma mark - Table view data source
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    
-    return self.contacts.count;
-}
-
-
-#pragma mark - notification event
-//好友列表变化
-- (void)rosterChange
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    //从存储器中取出我得好友数组，更新数据源
-    self.contacts = [NSMutableArray arrayWithArray:[[XMPPTool sharedXMPPTool].xmppRosterMemoryStorage unsortedUsers]];
-    [self.tableView reloadData];
-    [self reloadInputViews];
-    //NSLog(@"收到通知");
+    //return self.friends.count;
+    return _resultController.fetchedObjects.count;
 }
 
-
-
--(void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"contactCell" forIndexPath:indexPath];
-    
-    XMPPUserMemoryStorageObject *user = self.contacts[indexPath.row];
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString * ID=@"contactCell";
+    UITableViewCell * cell= [tableView dequeueReusableCellWithIdentifier:ID];
+    //获取对应好友
+    XMPPUserCoreDataStorageObject * friend = _resultController.fetchedObjects[indexPath.row];
     
     UILabel *nameLabel = (UILabel *)[cell viewWithTag:1001];
-    nameLabel.text = user.jid.user;
+    nameLabel.text = friend.jidStr;
     
+    
+    //判断好友状态
+    //sectionNum
+    //0-在线 ，1-离开，2-离线
     UILabel *statusLabel = (UILabel *)[cell viewWithTag:1002];
-    if ([user isOnline]) {
-        statusLabel.text = @"[在线]";
-        statusLabel.textColor = [UIColor blackColor];
-        nameLabel.textColor = [UIColor blackColor];
-    } else {
-        statusLabel.text = @"[离线]";
-        statusLabel.textColor = [UIColor grayColor];
-        nameLabel.textColor = [UIColor grayColor];
+    switch ([friend.sectionNum intValue]) {
+        case 0:
+            statusLabel.text=@"[在线]";
+            statusLabel.textColor = [UIColor blackColor];
+            nameLabel.textColor = [UIColor blackColor];
+            break;
+        case 1:
+            statusLabel.text=@"[离开]";
+            statusLabel.textColor = [UIColor redColor];
+            nameLabel.textColor = [UIColor redColor];
+            break;
+            
+        default:
+            statusLabel.text=@"[离线]";
+            statusLabel.textColor = [UIColor grayColor];
+            nameLabel.textColor = [UIColor grayColor];
+            break;
     }
     
-    return cell;
-}
 
-
-
-
-/*
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: forIndexPath:indexPath];
-    
-    // Configure the cell...
     
     return cell;
 }
-*/
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
+
+
+-(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(editingStyle==UITableViewCellEditingStyleDelete)
+    {
+        WCLog(@"删除好友");
+        XMPPUserCoreDataStorageObject * friend = _resultController.fetchedObjects[indexPath.row];
+        XMPPJID * friendJid=friend.jid;
+        [[XMPPTool sharedXMPPTool].xmppRoster removeUser:friendJid];
+    }
 }
-*/
 
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
+#pragma mark 当数据库内容发生改变
+-(void)controllerDidChangeContent:(NSFetchedResultsController *)controller
+{
+    WCLog(@"数据库数据发生改变");
+    //刷新表格
+    [self.tableView reloadData];
 }
-*/
 
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
 
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

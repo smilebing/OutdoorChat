@@ -58,7 +58,7 @@ typedef NS_ENUM(NSInteger,UserOperatingType){
 
 //花名册
 @property (nonatomic, strong) XMPPRoster *xmppRoster;
-@property (nonatomic, strong) XMPPRosterMemoryStorage *xmppRosterMemoryStorage;
+@property (nonatomic,strong) XMPPRosterCoreDataStorage * xmppRosterCoreDataStorage;
 
 @property (nonatomic, strong) XMPPMessageArchiving *xmppMessageArchiving;
 @property (nonatomic, strong) XMPPMessageArchivingCoreDataStorage *xmppMessageArchivingCoreDataStorage;

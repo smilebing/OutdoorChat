@@ -11,6 +11,7 @@
 #import "MainTabBarViewController.h"
 #import "Config.h"
 #import "XMPPTool.h"
+#import "UIAlertController+Convenience.h"
 
 
 @interface AppDelegate ()
@@ -25,33 +26,47 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    self.window = [[UIWindow alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
+//    self.window = [[UIWindow alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
     
     //判断用户的登录状态
     BOOL isLogin = [UserTool loginStatus];
-
-    //WCLog(@"登录状态: %bool",isLogin);
+    //NSLog(@"asdfasdfasdfafd");
+    //NSLog(@"isLogin: %d",isLogin);
     if (isLogin) {
             XMPPTool * xmppTool=[XMPPTool sharedXMPPTool];
             [xmppTool userLogin:^(XMPPResultType type) {
-                WCLog(@"根据保存的登录状态重新登录");
+                switch (type) {
+                    case XMPPResultTypeLoginSuccess:
+                        [self setupMainViewController];
+                        break;
+                        
+                    default:
+                        [self showLoginView];
+                        break;
+                }
+                //判断登录结果
+                //[self setupMainViewController];
+
             }];
-        [self setupMainViewController];
     }else{
-        UIViewController *vc = [UIStoryboard storyboardWithName:@"Login" bundle:[NSBundle mainBundle]].instantiateInitialViewController;
-        self.window.rootViewController = vc ;
+        [self showLoginView];
     }
     
     
     [self.window makeKeyAndVisible];
 
     //打印沙盒路径
-    //NSString * path=[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
-    //NSLog(@"path %@",path);
+    NSString * path=[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+    NSLog(@"path %@",path);
     
     return YES;
 }
 
+-(void)showLoginView
+{
+    UIViewController *vc = [UIStoryboard storyboardWithName:@"Login" bundle:[NSBundle mainBundle]].instantiateInitialViewController;
+    self.window.rootViewController = vc ;
+}
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

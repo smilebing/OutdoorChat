@@ -7,14 +7,24 @@
 //
 
 #import "UserTool.h"
-
+#include "Config.h"
 static NSString * const kUserNameKey = @"kUserNameKey";
 static NSString * const kUserPasswordKey = @"kUserPasswordKey";
 static NSString * const kUserLoginStatusKey = @"kUserLoginStatusKey";
+static NSString * const kUserJidKey=@"kUserJidKey";
 
 @implementation UserTool
 
 #pragma mark - Public Interface
+
++(void)saveJid:(NSString *)jid
+{
+    [self saveObjectValue:jid forKey:kUserJidKey];
+}
+
++(NSString *)jid{
+    return [NSString stringWithFormat:@"%@@%@",[self userName],XMPP_DOMAIN];
+}
 
 + (void)saveUserName:(NSString *)userName{
     

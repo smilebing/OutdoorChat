@@ -17,23 +17,29 @@
 #import <XMPPFramework/XMPPRosterCoreDataStorage.h>
 #import <XMPPFramework/XMPPRosterMemoryStorage.h>
 
+//消息模块
+#import <XMPPFramework/XMPPMessageArchiving.h>
 #import <XMPPFramework/XMPPMessageArchivingCoreDataStorage.h>
 
+//???
 #import <XMPPFramework/XMPPIncomingFileTransfer.h>
-#import <XMPPFramework/XMPPAutoPing.h>
 #import <XMPPFramework/XMPPReconnect.h>
+
 //电子名片头
 #import <XMPPFramework/XMPPvCardTempModule.h>
 #import <XMPPFramework/XMPPvCardCoreDataStorage.h>
 //头像
 #import <XMPPFramework/XMPPvCardAvatarModule.h>
 
+extern NSString * const XMPPLoginStatusChangeNotification=@"XMPPLoginStatusChangeNotification";
+
 typedef  enum {
     XMPPResultTypeLoginSuccess,//登录成功
     XMPPResultTypeLoginFail,//登录失败
     XMPPResultTypeRegisterSuccess,//注册成功
     XMPPResultTypeRegisterFail,//注册失败
-    XMPPResultTypeNetWorkError//网路异常
+    XMPPResultTypeNetWorkError,//网路异常
+    XMPPResultTypeConnecting//连接中
 }XMPPResultType;
 
 
@@ -52,7 +58,7 @@ typedef NS_ENUM(NSInteger,UserOperatingType){
 
 @property (nonatomic,assign)UserOperatingType operatingType;//判断是登录还是注册
 
-@property(nonatomic,retain)XMPPStream *xmppStream;//通道
+@property(nonatomic,strong)XMPPStream *xmppStream;//通道
 
 @property (nonatomic, strong) XMPPReconnect *xmppReconnect; //自动连接模块
 
@@ -60,11 +66,11 @@ typedef NS_ENUM(NSInteger,UserOperatingType){
 @property (nonatomic, strong) XMPPRoster *xmppRoster;
 @property (nonatomic,strong) XMPPRosterCoreDataStorage * xmppRosterCoreDataStorage;
 
+//聊天
 @property (nonatomic, strong) XMPPMessageArchiving *xmppMessageArchiving;
 @property (nonatomic, strong) XMPPMessageArchivingCoreDataStorage *xmppMessageArchivingCoreDataStorage;
 
 @property (nonatomic, strong) XMPPIncomingFileTransfer *xmppIncomingFileTransfer;
-@property (nonatomic, strong) XMPPPresence *receivePresence;
 
 @property XMPPvCardTempModule *vCard;//电子名片
 @property XMPPvCardCoreDataStorage *vCardStorage;//电子名片的数据存储

@@ -10,7 +10,7 @@
 #import "XMPPTool.h"
 #import "Config.h"
 #import "UserTool.h"
-
+#import "ChatViewController.h"
 
 @interface FriendListTableViewController ()<NSFetchedResultsControllerDelegate>
 
@@ -40,7 +40,6 @@
     //3.设置过滤和排序
     //过滤当前登录用户的好友
     NSString * jid=[UserTool jid] ;
-    NSLog(@"jid=%@",jid);
     NSPredicate * pre=[NSPredicate predicateWithFormat:@"streamBareJidStr = %@",jid];
     request.predicate=pre;
     
@@ -65,7 +64,7 @@
     //3.设置过滤和排序
     //过滤当前登录用户的好友
     NSString * jid=[UserTool jid] ;
-    NSLog(@"jid=%@",jid);
+    //NSLog(@"jid=%@",jid);
     NSPredicate * pre=[NSPredicate predicateWithFormat:@"streamBareJidStr = %@",jid];
     request.predicate=pre;
     
@@ -104,6 +103,13 @@
     UILabel *nameLabel = (UILabel *)[cell viewWithTag:1001];
     nameLabel.text = friend.jidStr;
     
+//    if(friend.photo)
+//    {
+//        WCLog(@"设置了头像");
+//        cell.imageView.image=friend.photo;
+//    }
+   // [cell viewWithTag:1003]=friend.photo;
+    
     
     //判断好友状态
     //sectionNum
@@ -134,7 +140,7 @@
 }
 
 
-
+//向左滑动删除
 -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if(editingStyle==UITableViewCellEditingStyleDelete)
@@ -144,6 +150,29 @@
         XMPPJID * friendJid=friend.jid;
         [[XMPPTool sharedXMPPTool].xmppRoster removeUser:friendJid];
     }
+}
+
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    //获取好友
+    XMPPUserCoreDataStorageObject * friend = _resultController.fetchedObjects[indexPath.row];
+
+    //进入聊天页面
+    [self performSegueWithIdentifier:@"ChatSegue" sender:friend.jid];
+}
+
+
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    id destVc=segue.destinationViewController;
+    if([destVc isKindOfClass:[ChatViewController class]])
+        {
+            ChatViewController * chatVc=destVc;
+            chatVc.friendJid=sender;
+        }
+    
 }
 
 #pragma mark 当数据库内容发生改变

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="InputView">
+            <rect key="frame" x="0.0" y="0.0" width="366" height="50"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="SDC-JJ-Io0">
+                    <rect key="frame" x="32" y="4" width="290" height="42"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="send"/>
+                </textView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8GQ-Ge-fN3">
+                    <rect key="frame" x="344" y="14" width="22" height="22"/>
+                </button>
+            </subviews>
+            <color key="backgroundColor" red="0.77950939119170981" green="0.77950939119170981" blue="0.77950939119170981" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="SDC-JJ-Io0" secondAttribute="trailing" constant="60" id="7bY-OW-yVX"/>
+                <constraint firstItem="SDC-JJ-Io0" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="4" id="TgU-eb-JaM"/>
+                <constraint firstAttribute="bottom" secondItem="SDC-JJ-Io0" secondAttribute="bottom" constant="4" id="d6z-f7-aqX"/>
+                <constraint firstAttribute="bottom" secondItem="8GQ-Ge-fN3" secondAttribute="bottom" constant="14" id="jwS-Gn-iS3"/>
+                <constraint firstItem="SDC-JJ-Io0" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="30" id="ln5-9B-9SF"/>
+                <constraint firstAttribute="trailing" secondItem="8GQ-Ge-fN3" secondAttribute="trailing" id="mfu-nI-AM4"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="addButton" destination="8GQ-Ge-fN3" id="pTL-H1-7uN"/>
+                <outlet property="textView" destination="SDC-JJ-Io0" id="6ZU-DG-bm4"/>
+            </connections>
+            <point key="canvasLocation" x="30" y="53"/>
+        </view>
+    </objects>
+</document>

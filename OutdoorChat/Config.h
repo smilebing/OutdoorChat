@@ -11,7 +11,7 @@
 
 #define HTTPSERVER @"你自己的文件上传地址"
 
-#define XMPP_HOST @"127.0.0.1"
+#define XMPP_HOST @"192.168.1.100"
 #define XMPP_PORT      5222
 #define XMPP_DOMAIN    @"zhuhedemacbook-pro.local"
 #define XMPP_SUBDOMAIN @"group"
@@ -19,13 +19,14 @@
 #define XMPP_CONNECT_TIMEOUT 5.0
 
 
-//通知
-#define XMPP_ROSTER_CHANGE @"XMPP_ROSTER_CHANGE"
+
 //*********************** 通知 *****************
 
-//#define XMPP_ROSTER_CHANGE_NOTIFICATION @"XMPP_ROSTER_CHANGE"
+//通知
+
+
+#define XMPP_ROSTER_CHANGE @"XMPP_ROSTER_CHANGE"
 #define XMPP_MESSAGE_CHANGE_NOTIFICATION @"XMPP_MESSAGE_CHANGE"
-//#define XMPP_GET_GROUPS_NOTIFICATION     @"XMPP_GET_GROUPS"
 
 //自定义Log
 #ifdef DEBUG

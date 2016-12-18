@@ -11,6 +11,7 @@
 
 
 
+
 @interface XMPPTool ()     
     @property XMPPResultBlock resultBlock;
 
@@ -65,17 +66,16 @@
         
         
         
-        //同时给_xmppRosterMemoryStorage 和 _xmppRoster都添加了代理
-        [_xmppRoster addDelegate:self delegateQueue:dispatch_get_main_queue()];
-        //设置好友同步策略,XMPP一旦连接成功，同步好友到本地
-        [_xmppRoster setAutoFetchRoster:YES]; //自动同步，从服务器取出好友
-        //关掉自动接收好友请求，默认开启自动同意
-        [_xmppRoster setAutoAcceptKnownPresenceSubscriptionRequests:NO];
+
         
         //4.消息模块，这里用单例，不能切换账号登录，否则会出现数据问题。
-        _xmppMessageArchivingCoreDataStorage = [XMPPMessageArchivingCoreDataStorage sharedInstance];
-        _xmppMessageArchiving = [[XMPPMessageArchiving alloc] initWithMessageArchivingStorage:_xmppMessageArchivingCoreDataStorage dispatchQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 9)];
+        //_xmppMessageArchivingCoreDataStorage = [XMPPMessageArchivingCoreDataStorage sharedInstance];
+        //        _xmppMessageArchiving = [[XMPPMessageArchiving alloc] initWithMessageArchivingStorage:_xmppMessageArchivingCoreDataStorage dispatchQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 9)];
+
+        _xmppMessageArchivingCoreDataStorage=[[XMPPMessageArchivingCoreDataStorage alloc]init];
+        _xmppMessageArchiving=[[XMPPMessageArchiving alloc]initWithMessageArchivingStorage:_xmppMessageArchivingCoreDataStorage];
         [_xmppMessageArchiving activate:self.xmppStream];
+        
         
         //5、文件接收
         _xmppIncomingFileTransfer = [[XMPPIncomingFileTransfer alloc] initWithDispatchQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)];
@@ -83,6 +83,13 @@
         [_xmppIncomingFileTransfer addDelegate:self delegateQueue:dispatch_get_main_queue()];
         [_xmppIncomingFileTransfer setAutoAcceptFileTransfers:YES];
         
+        
+        //        //同时给_xmppRosterMemoryStorage 和 _xmppRoster都添加了代理
+        //        [_xmppRoster addDelegate:self delegateQueue:dispatch_get_main_queue()];
+        //        //设置好友同步策略,XMPP一旦连接成功，同步好友到本地
+        //        [_xmppRoster setAutoFetchRoster:YES]; //自动同步，从服务器取出好友
+        //        //关掉自动接收好友请求，默认开启自动同意
+        //        [_xmppRoster setAutoAcceptKnownPresenceSubscriptionRequests:NO];
         
            }
     return _xmppStream;
@@ -148,8 +155,14 @@
     //    [presence addChild:[DDXMLNode elementWithName:@"status" stringValue:@"我现在很忙"]];
     //    [presence addChild:[DDXMLNode elementWithName:@"show" stringValue:@"xa"]];
     [self.xmppStream sendElement:presence];
+}
+
+//发送通知-正在连接
+-(void)postNotification:(XMPPResultType)resultType
+{
+    NSDictionary * userInfo=@{@"loginStatus":@(resultType)};
     
-    
+    [[NSNotificationCenter defaultCenter]postNotificationName:XMPPLoginStatusChangeNotification object:nil userInfo:userInfo];
 }
 
 /**
@@ -313,7 +326,7 @@
     [_vCard deactivate];
     [_avatar deactivate];
     [_xmppRoster deactivate];
-    
+    [_xmppMessageArchiving deactivate];
     
     //断开连接
     [_xmppStream disconnect];
@@ -325,7 +338,10 @@
     _avatar=nil;
     _xmppRoster=nil;
     _xmppRosterCoreDataStorage=nil;
+    _xmppMessageArchiving=nil;
+    _xmppMessageArchivingCoreDataStorage=nil;
     _xmppStream=nil;
+
 }
 
 -(void)dealloc

@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface RecentChatTableViewController : UITableViewController
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *indicatorView;
 
 @end
